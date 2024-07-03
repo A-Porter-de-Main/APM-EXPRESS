@@ -1,13 +1,16 @@
+-- CreateExtension
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 -- CreateTable
 CREATE TABLE "User" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL,
     "firstName" VARCHAR(50) NOT NULL,
     "lastName" VARCHAR(50) NOT NULL,
     "description" VARCHAR(250),
     "email" VARCHAR(250) NOT NULL,
     "phone" VARCHAR(20) NOT NULL,
     "password" VARCHAR(250) NOT NULL,
-    "stripUserId" UUID,
+    "stripeUserId" TEXT,
     "picturePath" VARCHAR(150) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -18,7 +21,7 @@ CREATE TABLE "User" (
 
 -- CreateTable
 CREATE TABLE "Role" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "id" UUID NOT NULL,
     "name" TEXT NOT NULL,
 
     CONSTRAINT "Role_pkey" PRIMARY KEY ("id")
@@ -26,64 +29,64 @@ CREATE TABLE "Role" (
 
 -- CreateTable
 CREATE TABLE "Address" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "userId" TEXT NOT NULL,
+    "id" UUID NOT NULL,
+    "userId" UUID NOT NULL,
 
     CONSTRAINT "Address_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Preference" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "userId" TEXT NOT NULL,
+    "id" UUID NOT NULL,
+    "userId" UUID NOT NULL,
 
     CONSTRAINT "Preference_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Request" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "userId" TEXT NOT NULL,
+    "id" UUID NOT NULL,
+    "userId" UUID NOT NULL,
 
     CONSTRAINT "Request_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Skill" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "userId" TEXT NOT NULL,
+    "id" UUID NOT NULL,
+    "userId" UUID NOT NULL,
 
     CONSTRAINT "Skill_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "FeedBack" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "userId" TEXT NOT NULL,
+    "id" UUID NOT NULL,
+    "userId" UUID NOT NULL,
 
     CONSTRAINT "FeedBack_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "FeedBackApplication" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "userId" TEXT NOT NULL,
+    "id" UUID NOT NULL,
+    "userId" UUID NOT NULL,
 
     CONSTRAINT "FeedBackApplication_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Issue" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "userId" TEXT NOT NULL,
+    "id" UUID NOT NULL,
+    "userId" UUID NOT NULL,
 
     CONSTRAINT "Issue_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "ObjectModel" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "userId" TEXT NOT NULL,
+    "id" UUID NOT NULL,
+    "userId" UUID NOT NULL,
 
     CONSTRAINT "ObjectModel_pkey" PRIMARY KEY ("id")
 );

@@ -6,23 +6,26 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  extensions = [uuidOssp(map: "uuid-ossp")]
 }
 
 
+
 model User {
-  id                    String             @id @default(uuid())
+  id                    String             @id @default(uuid()) @db.Uuid
   firstName             String             @db.VarChar(50)
   lastName              String             @db.VarChar(50)
   description           String?            @db.VarChar(250) 
   email                 String             @unique @db.VarChar(250)
   phone                 String             @unique @db.VarChar(20)
   password              String             @db.VarChar(250)
-  stripUserId           String?            @db.Uuid
+  stripeUserId           String?           
   picturePath           String             @db.VarChar(150)
   createdAt             DateTime           @default(now())
   updatedAt             DateTime           @updatedAt
@@ -41,55 +44,55 @@ model User {
 }
 
 model Role {
-  id     String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name   String
+  id     String  @id @default(uuid()) @db.Uuid 
+  name   String   
   users  User[]
 }
 
 model Address {
-  id     String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId String
+  id     String  @id @default(uuid()) @db.Uuid 
+  userId String   @db.Uuid 
   user   User    @relation(fields: [userId], references: [id])
 }
 
 model Preference {
-  id     String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId String @unique
+  id     String  @id @default(uuid()) @db.Uuid 
+  userId String  @unique @db.Uuid 
   user   User    @relation(fields: [userId], references: [id])
 }
 
 model Request {
-  id     String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId String
+  id     String  @id @default(uuid()) @db.Uuid 
+  userId String @db.Uuid 
   user   User    @relation(fields: [userId], references: [id])
 }
 
 model Skill {
-  id     String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId String
+  id     String  @id @default(uuid()) @db.Uuid 
+  userId String @db.Uuid 
   user   User    @relation(fields: [userId], references: [id])
 }
 
 model FeedBack {
-  id     String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId String
+  id     String  @id @default(uuid()) @db.Uuid 
+  userId String   @db.Uuid 
   user   User    @relation(fields: [userId], references: [id])
 }
 
 model FeedBackApplication {
-  id     String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId String
+  id     String  @id @default(uuid()) @db.Uuid 
+  userId String @db.Uuid 
   user   User    @relation(fields: [userId], references: [id])
 }
 
 model Issue {
-  id     String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId String
+  id     String  @id @default(uuid()) @db.Uuid 
+  userId String  @db.Uuid 
   user   User    @relation(fields: [userId], references: [id])
 }
 
 model ObjectModel {
-  id     String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId String
+  id     String  @id @default(uuid()) @db.Uuid 
+  userId String   @db.Uuid
   user   User    @relation(fields: [userId], references: [id])
 }
