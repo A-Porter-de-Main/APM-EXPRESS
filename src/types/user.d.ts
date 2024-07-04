@@ -1,3 +1,4 @@
+import { Role } from "@prisma/client";
 
 export interface UserRegistrationDTO {
   firstName: string;
@@ -12,6 +13,7 @@ export interface UserRegistrationDTO {
   updatedAt: Date;
   roleId: string | null;
 }
+
 export interface UserTokenInfosDTO {
   id: string;
   firstName: string;
@@ -25,4 +27,5 @@ export interface UserTokenInfosDTO {
   createdAt: Date;
   updatedAt: Date;
   roleId: string | null;
+  role: Role
 }

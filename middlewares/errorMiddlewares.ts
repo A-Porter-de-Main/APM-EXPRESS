@@ -4,7 +4,7 @@ export function errorHandler(err: Error, req: Request, res: Response, next: Next
   console.error(err);
 
   if (err.message.startsWith('AlreadyTakenError')) {
-    res.status(409).json({ message: err.message });
+    res.status(422).json({ message: err.message });
   } else if (err.message.startsWith('NotFoundError')) {
     res.status(404).json({ message: err.message });
   } else if (err.message.startsWith('BadCredentialsError')) {

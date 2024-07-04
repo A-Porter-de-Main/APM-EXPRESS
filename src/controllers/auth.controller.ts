@@ -4,6 +4,8 @@ import { validationResult } from 'express-validator';
 import { UserRegistrationDTO, UserTokenInfosDTO } from '../types/user';
 import jwt from 'jsonwebtoken';
 import bcrypt from "bcrypt"
+import { alreadyTakenError, notFoundError } from '../../utils/customErrors';
+import { FindRoleId } from '../../utils/findRole';
 
 const prisma = new PrismaClient();
 
@@ -21,6 +23,9 @@ export const login = async (req: Request, res: Response) => {
 
   const user = await prisma.user.findUnique({
     where: { email },
+    include: {
+      role: true
+    }
   })
 
   if (!user || !(await bcrypt.compare(password, user.password))) {
@@ -42,7 +47,7 @@ export const login = async (req: Request, res: Response) => {
       picturePath: user.picturePath,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt
-    }
+    },
   });
 };
 // export const register = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -83,6 +88,32 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
 
     const { firstName, lastName, description, email, phone, password, stripeUserId, picturePath } = req.body;
 
+    //Check si phone déjà existant
+    const existingPhone = await prisma.user.findFirst({
+      where: {
+        phone: phone
+      }
+    })
+    if (existingPhone) {
+      alreadyTakenError("phone")
+    }
+
+    //Check si email déjà existant
+    const existingEmail = await prisma.user.findFirst({
+      where: {
+        email: email
+      }
+    })
+
+    if (existingEmail) {
+      alreadyTakenError("email")
+    }
+
+    let findingRole = await FindRoleId("user")
+
+    if (!findingRole) notFoundError("Role")
+
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await prisma.user.create({
@@ -97,7 +128,11 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
         picturePath,
         createdAt: new Date(),
         updatedAt: new Date(),
+        roleId: findingRole?.id
       },
+      include: {
+        role: true
+      }
     });
 
 
@@ -115,13 +150,12 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
         stripeUserId: user.stripeUserId,
         picturePath: user.picturePath,
         createdAt: user.createdAt,
-        updatedAt: user.updatedAt
+        updatedAt: user.updatedAt,
+        role: user.role,
+        roleId: user.roleId,
       }
     });
   } catch (e) {
     next(e)
   }
 };
-
-
-
