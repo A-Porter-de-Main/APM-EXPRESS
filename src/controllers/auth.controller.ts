@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { PrismaClient, User } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { validationResult } from 'express-validator';
 import { UserRegistrationDTO, UserTokenInfosDTO } from '../types/user';
 import jwt from 'jsonwebtoken';
@@ -12,7 +12,7 @@ const prisma = new PrismaClient();
 const generateToken = (user: UserTokenInfosDTO) => {
   if (process.env.JWT_SECRET) {
     return jwt.sign(
-      { id: user.id, username: user.email },  // Payload
+      { id: user.id, email: user.email, firstName: user.firstName, role: user.role.name },  // Payload
       process.env.JWT_SECRET,                    // Clé secrète
       { expiresIn: process.env.JWT_EXPIRES_IN }  // Options de token
     );
@@ -50,38 +50,6 @@ export const login = async (req: Request, res: Response) => {
     },
   });
 };
-// export const register = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-//   try {
-//     const errors = validationResult(req);
-//     if (!errors.isEmpty()) {
-//       res.status(400).json({ errors: errors.array() });
-//       return;
-//     }
-
-//     const { firstName, lastName, email, phone, password, picturePath, description } = req.body;
-
-//     const user = await prisma.user.create({
-//       data: {
-//         firstName,
-//         lastName,
-//         description,
-//         email,
-//         phone,
-//         password,
-//         stripUserId: undefined,
-//         picturePath,
-//         createdAt: new Date(),
-//         updatedAt: new Date(),
-//       },
-//     });
-
-
-
-//     res.status(201).json({ message: 'User created successfully', user });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -159,3 +127,12 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
     next(e)
   }
 };
+
+export const test = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    console.log("la fonction trql")
+    res.status(200).json({ message: 'tqt fraté' })
+  } catch (e) {
+    next(e)
+  }
+}
