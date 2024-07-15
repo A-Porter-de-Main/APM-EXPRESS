@@ -1,19 +1,16 @@
-import { check } from 'express-validator';
+import { z } from 'zod';
 
-export const authValidator = [
-  check('password').notEmpty().isString().withMessage('Username cannot be empty'),
-  check('email').notEmpty().isEmail().withMessage('Invalid email format'),
-];
+const phoneNumberRegex = /^\+?[0-9]\d{1,14}$/;
 
-export const authSignUpValidator = [
-  check('firstName').notEmpty().isString().withMessage('Username cannot be empty'),
-  check('lastName').notEmpty().isString().withMessage('Email cannot be empty'),
-  check('description').notEmpty().isString().withMessage('Email cannot be empty'),
-  check('email').notEmpty().isEmail().withMessage('Invalid email format'),
-  check('phone').notEmpty().withMessage('Invalid Phone format')
-    .isMobilePhone('fr-FR').withMessage('Please provide a valid mobile phone number'),
-  check('password').notEmpty().isString().withMessage('Invalid Password format'),
+export const userRegistrationSchema = z.object({
+  firstName: z.string().min(1),
+  lastName: z.string().min(1),
+  email: z.string().email().min(1),
+  password: z.string().min(8),
+  phone: z.string().regex(phoneNumberRegex, "invalid phone number"),
+});
 
-];
-
-
+export const userLoginSchema = z.object({
+  email: z.string().email().min(1),
+  password: z.string().min(8),
+});
