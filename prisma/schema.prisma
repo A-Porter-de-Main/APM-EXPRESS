@@ -15,8 +15,6 @@ datasource db {
   extensions = [uuidOssp(map: "uuid-ossp")]
 }
 
-
-
 model User {
   id                    String             @id @default(uuid()) @db.Uuid
   firstName             String             @db.VarChar(50)
@@ -51,7 +49,11 @@ model Role {
 
 model Address {
   id     String  @id @default(uuid()) @db.Uuid 
-  userId String   @db.Uuid 
+  userId String   @db.Uuid
+  latitude    Float
+  longitude   Float
+  zipCode   String
+  street  String
   user   User    @relation(fields: [userId], references: [id])
 }
 

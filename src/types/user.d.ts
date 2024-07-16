@@ -14,6 +14,11 @@ export interface UserRegistrationDTO {
   roleId: string | null;
 }
 
+export interface UserLoginDTO {
+  email: string;
+  password: string;
+}
+
 export interface UserTokenInfosDTO {
   id: string;
   firstName: string;

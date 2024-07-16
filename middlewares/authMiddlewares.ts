@@ -7,9 +7,8 @@ const prisma = new PrismaClient()
 
 export function authHandler(roles: string[]): (req: Request, res: Response, next: NextFunction) => void {
   return async (req: Request, res: Response, next: NextFunction) => {
-    //Récup la requete avec le bearer
-    console.log("T'es qui grooos ? : ")
 
+    //Récup la requete avec le bearer
     let authBearer = req.headers.authorization?.split("Bearer ")[1];
 
     console.log("C'est toi le auth bearer ? : ", authBearer)
