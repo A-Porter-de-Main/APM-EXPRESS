@@ -24,8 +24,6 @@ export function authHandler(roles: string[]): (req: Request, res: Response, next
     let existngUser = await prisma.user.findUnique({ where: { id: token.id } })
 
 
-    disconnectPrisma(prisma)
-
 
     if (roles.includes(token.role) && existngUser) {
       next();

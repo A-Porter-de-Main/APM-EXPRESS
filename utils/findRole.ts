@@ -11,6 +11,5 @@ export const FindRoleId = async (name: string) => {
     }
   })
 
-  disconnectPrisma(prisma)
   return findingRole;
 }

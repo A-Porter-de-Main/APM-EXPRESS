@@ -11,6 +11,8 @@ export function errorHandler(err: Error, req: Request, res: Response, next: Next
     res.status(401).json({ message: err.message });
   } else if (err.message.startsWith('BadRequestError')) {
     res.status(400).json({ message: err.message });
+  } else if (err.message.startsWith('NoContent')) {
+    res.status(204);
   } else {
     res.status(500).json({ message: 'Internal server error' });
   }

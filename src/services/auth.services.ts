@@ -1,9 +1,11 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, User } from '@prisma/client';
 import jwt from 'jsonwebtoken';
 import bcrypt from "bcrypt"
 import { UserLoginDTO, UserRegistrationDTO, UserTokenInfosDTO } from '../types/user';
-import { badCredentialsError, serverError } from '../../utils/customErrors';
-import { disconnectPrisma } from '../../utils/disconnectPrismaClient';
+import { alreadyTakenError, badCredentialsError, notFoundError, serverError } from '../../utils/customErrors';
+import { CheckExistingField, CheckExistingFieldOrThrow } from '../../utils/checkFields';
+import { FindRoleId } from '../../utils/findRole';
+import { AddressDTO } from '../types/address';
 
 const prisma = new PrismaClient();
 
@@ -12,7 +14,7 @@ const prisma = new PrismaClient();
  * @param user 
  * @returns Un JWT signé avec les informations utilisateurs
  */
-export const generateToken = (user: UserTokenInfosDTO) => {
+export const GenerateToken = (user: UserTokenInfosDTO) => {
   if (process.env.JWT_SECRET) {
     return jwt.sign(
       { id: user.id, email: user.email, firstName: user.firstName, role: user.role.name },  // Payload
@@ -22,14 +24,12 @@ export const generateToken = (user: UserTokenInfosDTO) => {
   }
 };
 
-
-
 /**
  * Fonction de login
  * @param credentials 
  * @returns 
  */
-export const authenticateUser = async (credentials: UserLoginDTO) => {
+export const AuthenticateUser = async (credentials: UserLoginDTO) => {
   try {
     const { email, password } = credentials;
 
@@ -43,8 +43,65 @@ export const authenticateUser = async (credentials: UserLoginDTO) => {
     if (!user || !(await bcrypt.compare(password, user.password))) {
       badCredentialsError("Email or Password invalid");
     }
+    const token = GenerateToken(user as UserTokenInfosDTO);
+    return { token, user }
 
-    const token = generateToken(user as UserTokenInfosDTO);
+  } catch (e) {
+    throw e;
+  }
+}
+
+/**
+ * Fonction de création d'utilisateur avec son Addresse
+ * @param userData 
+ * @returns 
+ */
+export const CreateUser = async (userData: UserRegistrationDTO) => {
+  try {
+    const { firstName, lastName, description, email, phone, password, stripeUserId, picturePath, longitude, latitude, street, zipCode } = userData;
+
+    //Vérifie si Phone et Email existe 
+    const isPhoneAlreadyExist = await CheckExistingField("phone", phone);
+    const isEmailAlreadyExist = await CheckExistingField("email", email);
+
+    //Récupère le rôle user en bdd
+    let findingRole = await FindRoleId("user");
+    if (!findingRole) notFoundError("Role");
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const address: AddressDTO = {
+      latitude: typeof latitude != "number" ? parseFloat(latitude) : latitude,
+      longitude: typeof longitude != "number" ? parseFloat(longitude) : latitude,
+      street: street,
+      zipCode: zipCode
+    }
+
+    const user: User = await prisma.user.create({
+      data: {
+        firstName,
+        lastName,
+        description,
+        email,
+        phone,
+        password: hashedPassword,
+        stripeUserId,
+        picturePath: picturePath,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        roleId: findingRole?.id,
+        addresses: {
+          create: address
+        }
+      },
+      include: {
+        role: true,
+        addresses: true,
+      }
+    });
+
+
+    const token = GenerateToken(user as UserTokenInfosDTO);
 
     return { token, user }
 

@@ -18,3 +18,7 @@ export function badRequestError(message: string): Error {
 export function serverError(message: string): Error {
   throw new Error(`ServerError: ${message}`);
 }
+
+export function NoContent(): Error {
+  throw new Error(`NoContent`);
+}

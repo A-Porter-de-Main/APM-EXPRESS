@@ -9,9 +9,13 @@ export interface UserRegistrationDTO {
   password: string;
   stripeUserId: string | null;
   picturePath: string;
-  createdAt: Date;
-  updatedAt: Date;
-  roleId: string | null;
+  // createdAt: Date;
+  // updatedAt: Date;
+  // roleId: string | null;
+  latitude: number,
+  longitude: number,
+  street: string,
+  zipCode: string,
 }
 
 export interface UserLoginDTO {
