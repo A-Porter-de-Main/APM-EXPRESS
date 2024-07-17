@@ -8,7 +8,7 @@ const prisma = new PrismaClient()
  * @param field 
  * @param value 
  */
-export const CheckExistingField = async (field: string, value: string) => {
+export const CheckExistingField = async (field: string, value: string): Promise<void> => {
   try {
     const existingUser = await prisma.user.findFirst({
       where: {
@@ -29,7 +29,7 @@ export const CheckExistingField = async (field: string, value: string) => {
  * @param value 
  * @returns 
  */
-export const CheckExistingFieldOrThrow = async (field: string, value: string) => {
+export const CheckExistingFieldOrThrow = async (field: string, value: string): Promise<boolean> => {
   try {
     const existingUser = await prisma.user.findFirst({
       where: {

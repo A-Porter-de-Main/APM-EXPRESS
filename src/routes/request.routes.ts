@@ -17,7 +17,5 @@ requestRouter.delete('/:id', authHandler(["admin", "user"]), DeleteRequest);
 requestRouter.post('/register', upload.single("photo"), validateData(userRegistrationSchema), Register);
 
 
-// requestRouter.get('/test', authHandler(["otrerole", "admin"]), test);
-
 export default requestRouter;
 
