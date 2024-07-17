@@ -18,6 +18,7 @@ export const GetAllRequest = async () => {
     if (!requests || requests.length <= 0) {
       NoContent();
     }
+
     return requests;
   } catch (e) {
     throw e;
@@ -49,7 +50,12 @@ export const PostRequest = async (requestDto: RequestRegistrationDTO) => {
   try {
     const { description, deadline, skills, userId } = requestDto;
 
-    const isUserExist = CheckExistingFieldOrThrow("id", userId);
+    //Check si l'user existe
+    const isUserExist = await CheckExistingFieldOrThrow("id", userId);
+
+    //Check si tous les ids des skills existes ?
+
+
 
     const requestCreated = await prisma.request.create({
       data: {
@@ -74,7 +80,7 @@ export const PostRequest = async (requestDto: RequestRegistrationDTO) => {
 }
 
 
-// export const PactRequest = async (requestId: string) => {
+// export const PacthRequest = async (requestId: string) => {
 //   try {
 //     const request = await prisma.request.create({
 //       data: {
