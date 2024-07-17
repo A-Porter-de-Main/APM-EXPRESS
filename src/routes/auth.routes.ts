@@ -10,6 +10,7 @@ const authRouter = Router();
 authRouter.post('/login', validateData(userLoginSchema), Login);
 authRouter.post('/register', upload.single("photo"), validateData(userRegistrationSchema), Register);
 
+export default authRouter;
 
 // authRouter.get('/test', authHandler(["otrerole", "admin"]), test);
 

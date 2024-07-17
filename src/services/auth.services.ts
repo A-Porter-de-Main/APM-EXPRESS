@@ -59,6 +59,7 @@ export const AuthenticateUser = async (credentials: UserLoginDTO) => {
 export const CreateUser = async (userData: UserRegistrationDTO) => {
   try {
     const { firstName, lastName, description, email, phone, password, stripeUserId, picturePath, longitude, latitude, street, zipCode } = userData;
+    console.log(userData);
 
     //Vérifie si Phone et Email existe 
     const isPhoneAlreadyExist = await CheckExistingField("phone", phone);
