@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response, NextFunction } from 'express';
-import { DeleteRequest, GetAllRequest, GetOneRequestById } from "../services/request.services";
+import { CreateRequest, DeleteRequest, GetAllRequest, GetOneRequestById } from "../services/request.services";
 
 const prisma = new PrismaClient()
 
@@ -34,9 +34,9 @@ export const PostRequest = async (req: Request, res: Response, next: NextFunctio
   try {
 
     const { description, deadline, skills, userId } = req.body
-    const request = await GetOneRequestById(userId);
+    const requestCreated = await CreateRequest({ description, deadline, skills, userId });
 
-    return res.status(200).json(request);
+    return res.status(200).json(requestCreated);
   } catch (e) {
     next(e)
   }

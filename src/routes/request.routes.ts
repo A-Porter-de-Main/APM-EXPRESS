@@ -6,11 +6,12 @@ import upload from '../../config/multer';
 import { validateData } from '../../middlewares/validatorMiddlewares';
 import { GetRequests, GetOneById, PostRequest, PatchRequest } from "../controllers/request.controller"
 import { DeleteRequest } from '../services/request.services';
+import { createRequestSchema } from "../../validators/request.validator"
 
 const requestRouter = Router();
 requestRouter.get('/', authHandler(["admin", "user"]), GetRequests);
 requestRouter.get('/:id', authHandler(["admin", "user"]), GetOneById);
-requestRouter.post('/', authHandler(["admin", "user"]), PostRequest);
+requestRouter.post('/', validateData(createRequestSchema), authHandler(["admin", "user"]), PostRequest);
 // requestRouter.patch('/', authHandler(["admin", "user"]), PatchRequest); //a faire
 requestRouter.delete('/:id', authHandler(["admin", "user"]), DeleteRequest);
 

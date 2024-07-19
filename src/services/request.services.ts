@@ -34,6 +34,14 @@ export const GetOneRequestById = async (requestId: string) => {
   try {
     const request = await prisma.request.findUnique({
       where: { id: requestId },
+      include: {
+        user: true,
+        skills: {
+          include: {
+            skill: true
+          }
+        }
+      }
     })
 
     if (!request) {
@@ -45,8 +53,9 @@ export const GetOneRequestById = async (requestId: string) => {
   }
 }
 
+//Mettre une validation sur les request ( dont les skills au mooins 1 valide puis aussi verifier le userId qu'il soit valide)
 
-export const PostRequest = async (requestDto: RequestRegistrationDTO) => {
+export const CreateRequest = async (requestDto: RequestRegistrationDTO) => {
   try {
     const { description, deadline, skills, userId } = requestDto;
 
@@ -67,12 +76,16 @@ export const PostRequest = async (requestDto: RequestRegistrationDTO) => {
             skill: { connect: { id: skillId } }
           }))
         }
+      },
+      include: {
+        skills: true
       }
     })
 
-    if (!requestCreated) {
-      notFoundError("Request not found");
-    }
+    // if (!requestCreated) {
+    //   notFoundError("Request not found");
+    // }
+
     return requestCreated;
   } catch (e) {
     throw e;
