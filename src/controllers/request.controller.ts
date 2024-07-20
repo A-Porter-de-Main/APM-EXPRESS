@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response, NextFunction } from 'express';
-import { CreateRequest, DeleteRequest, GetAllRequest, GetOneRequestById } from "../services/request.services";
+import { CreateRequest, DeleteRequest, GetAllRequest, GetOneRequestById, UpdateRequest } from "../services/request.services";
 
 const prisma = new PrismaClient()
 
@@ -32,8 +32,8 @@ export const PostRequest = async (req: Request, res: Response, next: NextFunctio
   try {
 
     const { description, deadline, skills, userId, } = req.body;
-    // const photos = req.files ? req.files : undefined;
-    const photos = req.files || [];
+    const photos = req.files ? req.files : undefined;
+
     console.log("les fichiers: ", photos)
     //Le formdata transforme mon tableau en string
     //Ducoup je le retransforme en tableau
@@ -49,6 +49,17 @@ export const PostRequest = async (req: Request, res: Response, next: NextFunctio
 export const PatchRequest = async (req: Request, res: Response, next: NextFunction) => {
   try {
 
+    const { description, deadline, skills, userId, } = req.body;
+    const photos = req.files ? req.files : undefined;
+    const { id } = req.params;
+
+    console.log("les fichiers: ", photos)
+    console.log("les skills: ", skills)
+
+    const stringToArraySkill = skills ? JSON.parse(skills) : undefined;
+    const requestUpdated = await UpdateRequest(id, { description, deadline, skills: stringToArraySkill, userId, photos: photos });
+
+    return res.status(200).json(requestUpdated);
   } catch (e) {
     next(e)
   }
@@ -66,6 +77,3 @@ export const DeleteById = async (req: Request, res: Response, next: NextFunction
     next(e)
   }
 }
-
-//  '{ [fieldname: string]: Express.Multer.File[]; } | Express.Multer.File[] | undefined' is not assignable to type 
-//       '{ [fieldname: string]: File[]; } | File[] | undefined'

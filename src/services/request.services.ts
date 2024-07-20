@@ -58,8 +58,8 @@ export const CreateRequest = async (requestDto: RequestRegistrationDTO) => {
 
     let picturesData: any = [];
 
+    //Vérifie si il existe un seul ou plusieurs photos ou pas de photos
     if (Array.isArray(photos)) {
-      // Si photos est un tableau de fichiers
       picturesData = photos.map(item => ({
         picturePath: item.path
       }));
@@ -93,22 +93,59 @@ export const CreateRequest = async (requestDto: RequestRegistrationDTO) => {
   }
 }
 
-// export const PacthRequest = async (requestId: string) => {
-//   try {
-//     const request = await prisma.request.create({
-//       data: {
+export const UpdateRequest = async (requestId: string, requestDto: Partial<RequestRegistrationDTO>) => {
+  try {
+    const { description, deadline, skills, userId, photos } = requestDto;
 
-//       }
-//     })
+    let picturesData: any = [];
 
-//     if (!request) {
-//       notFoundError("Request not found");
-//     }
-//     return request;""
-//   } catch (e) {
-//     throw e;
-//   }
-// }
+    // Vérifie si il existe un seul ou plusieurs photos ou pas de photos
+    if (Array.isArray(photos)) {
+      picturesData = photos.map(item => ({
+        picturePath: item.path
+      }));
+    } else if (photos && typeof photos === 'object') {
+      picturesData = [{ picturePath: photos.path }];
+    }
+
+
+    const dataToUpdate: any = {
+      description,
+      deadline,
+      userId
+    };
+
+    if (picturesData.length > 0) {
+      dataToUpdate.pictures = {
+        deleteMany: {},
+        create: picturesData
+      };
+    }
+
+    if (skills && skills.length > 0) {
+      dataToUpdate.skills = {
+        deleteMany: {},
+        create: skills.map(skillId => ({
+          skill: { connect: { id: skillId } }
+        }))
+      };
+    }
+
+    const requestUpdated = await prisma.request.update({
+      where: { id: requestId },
+      data: dataToUpdate,
+      include: {
+        skills: true,
+        pictures: true,
+      }
+    });
+
+    return requestUpdated;
+  } catch (e) {
+    throw e;
+  }
+};
+
 
 /**
  * Supprime la demande avec son id

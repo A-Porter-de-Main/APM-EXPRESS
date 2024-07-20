@@ -7,7 +7,5 @@ export interface RequestRegistrationDTO {
   deadline: Datetime,
   userId: string,
   skills: string[],
-  // photos: { [fieldname: string]: File[]; } | File[] | undefined,
-  photos: { [fieldname: string]: Express.Multer.File[]; } | Express.Multer.File[] | [],
-  // photos: Express.Multer.File[] | [],
+  photos: { [fieldname: string]: Express.Multer.File[]; } | Express.Multer.File[] | undefined,
 }

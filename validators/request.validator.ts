@@ -65,13 +65,30 @@ export const createRequestSchema = z.object({
  */
 export const deleteRequestSchema = z.object({
   id: z.string().min(1).superRefine(async (val, ctx) => {
-    const existingUser = await CheckExistingFieldForZod("id", val, "user")
+    const existingUser = await CheckExistingFieldForZod("id", val, "request")
 
     if (!existingUser) {
       ctx.addIssue({
         code: "custom",
-        message: "User does not exist",
-        path: ["userId"]
+        message: "Request does not exist",
+        path: ["id"]
+      })
+    }
+  }),
+});
+
+/**
+ * Schéma de validation pour le patch
+ */
+export const patchRequestSchema = z.object({
+  id: z.string().min(1).superRefine(async (val, ctx) => {
+    const existingUser = await CheckExistingFieldForZod("id", val, "request")
+
+    if (!existingUser) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Requet does not exist",
+        path: ["id"]
       })
     }
   }),
