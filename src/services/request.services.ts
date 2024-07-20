@@ -154,15 +154,20 @@ export const UpdateRequest = async (requestId: string, requestDto: Partial<Reque
  */
 export const DeleteRequest = async (requestId: string) => {
   try {
+    console.log("ici 3: ", requestId)
 
     const request = await prisma.request.delete({
       where: {
         id: requestId
       }
     })
+    console.log("ici 4")
+
 
     return request;
   } catch (e) {
+    console.log("ici err service ")
+
     throw e;
   }
 }

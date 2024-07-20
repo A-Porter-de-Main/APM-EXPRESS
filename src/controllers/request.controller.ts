@@ -20,7 +20,6 @@ export const GetOneById = async (req: Request, res: Response, next: NextFunction
   try {
     const { id } = req.params
     const request = await GetOneRequestById(id);
-
     return res.status(200).json(request);
   } catch (e) {
     next(e)
@@ -70,9 +69,11 @@ export const PatchRequest = async (req: Request, res: Response, next: NextFuncti
 export const DeleteById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
+    console.log("ici 2")
+
     const deletedRequest = await DeleteRequest(id)
 
-    return res.status(204);
+    return res.status(204).json("");
   } catch (e) {
     next(e)
   }
