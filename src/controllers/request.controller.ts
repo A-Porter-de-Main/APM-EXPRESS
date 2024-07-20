@@ -33,8 +33,13 @@ export const GetOneById = async (req: Request, res: Response, next: NextFunction
 export const PostRequest = async (req: Request, res: Response, next: NextFunction) => {
   try {
 
-    const { description, deadline, skills, userId } = req.body
-    const requestCreated = await CreateRequest({ description, deadline, skills, userId });
+    const { description, deadline, skills, userId, } = req.body;
+    const picturePath = req.files ? req.files : null;
+    console.log("les fichiers: ", picturePath)
+    //Le formdata transforme mon tableau en string
+    //Ducoup je le retransforme en tableau
+    const stringToArraySkill = JSON.parse(skills);
+    const requestCreated = await CreateRequest({ description, deadline, skills: stringToArraySkill, userId });
 
     return res.status(200).json(requestCreated);
   } catch (e) {

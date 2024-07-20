@@ -1,8 +1,5 @@
 import { PrismaClient, User } from '@prisma/client';
-import bcrypt from "bcrypt"
-import { UserLoginDTO, UserRegistrationDTO, UserTokenInfosDTO } from '../types/user';
-import { badCredentialsError, NoContent, notFoundError } from '../../utils/customErrors';
-import { CheckExistingFieldOrThrow, checkExistingFieldRequestOrThrow } from '../../utils/checkFields';
+import { NoContent, notFoundError } from '../../utils/customErrors';
 import { RequestRegistrationDTO } from '../types/request';
 
 const prisma = new PrismaClient();
@@ -59,13 +56,6 @@ export const CreateRequest = async (requestDto: RequestRegistrationDTO) => {
   try {
     const { description, deadline, skills, userId } = requestDto;
 
-    //Check si l'user existe
-    const isUserExist = await CheckExistingFieldOrThrow("id", userId);
-
-    //Check si tous les ids des skills existes ?
-
-
-
     const requestCreated = await prisma.request.create({
       data: {
         description,
@@ -82,16 +72,11 @@ export const CreateRequest = async (requestDto: RequestRegistrationDTO) => {
       }
     })
 
-    // if (!requestCreated) {
-    //   notFoundError("Request not found");
-    // }
-
     return requestCreated;
   } catch (e) {
     throw e;
   }
 }
-
 
 // export const PacthRequest = async (requestId: string) => {
 //   try {
@@ -104,7 +89,7 @@ export const CreateRequest = async (requestDto: RequestRegistrationDTO) => {
 //     if (!request) {
 //       notFoundError("Request not found");
 //     }
-//     return request;
+//     return request;""
 //   } catch (e) {
 //     throw e;
 //   }
@@ -117,9 +102,6 @@ export const CreateRequest = async (requestDto: RequestRegistrationDTO) => {
  */
 export const DeleteRequest = async (requestId: string) => {
   try {
-
-    const existingRequest = checkExistingFieldRequestOrThrow("id", requestId);
-    if (!existingRequest) notFoundError("Request not found");
 
     const request = await prisma.request.delete({
       where: {
