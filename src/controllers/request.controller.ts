@@ -65,7 +65,6 @@ export const PatchRequest = async (req: Request, res: Response, next: NextFuncti
 }
 
 //Delete
-//Todo vérifier que Les skills et le user associé ne soit pas delete en cascade avec
 export const DeleteById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
