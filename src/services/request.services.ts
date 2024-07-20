@@ -54,13 +54,27 @@ export const GetOneRequestById = async (requestId: string) => {
 
 export const CreateRequest = async (requestDto: RequestRegistrationDTO) => {
   try {
-    const { description, deadline, skills, userId } = requestDto;
+    const { description, deadline, skills, userId, photos } = requestDto;
+
+    let picturesData: any = [];
+
+    if (Array.isArray(photos)) {
+      // Si photos est un tableau de fichiers
+      picturesData = photos.map(item => ({
+        picturePath: item.path
+      }));
+    } else if (photos && typeof photos === 'object') {
+      picturesData = [{ picturePath: photos.path }]
+    }
 
     const requestCreated = await prisma.request.create({
       data: {
         description,
         userId,
         deadline,
+        pictures: {
+          create: picturesData
+        },
         skills: {
           create: skills.map(skillId => ({
             skill: { connect: { id: skillId } }
@@ -68,7 +82,8 @@ export const CreateRequest = async (requestDto: RequestRegistrationDTO) => {
         }
       },
       include: {
-        skills: true
+        skills: true,
+        pictures: true,
       }
     })
 

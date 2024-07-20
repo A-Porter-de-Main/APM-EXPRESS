@@ -9,8 +9,6 @@ const prisma = new PrismaClient()
 export const GetRequests = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const requests = await GetAllRequest();
-
-
     return res.status(200).json(requests);
   } catch (e) {
     next(e)
@@ -34,12 +32,13 @@ export const PostRequest = async (req: Request, res: Response, next: NextFunctio
   try {
 
     const { description, deadline, skills, userId, } = req.body;
-    const picturePath = req.files ? req.files : null;
-    console.log("les fichiers: ", picturePath)
+    // const photos = req.files ? req.files : undefined;
+    const photos = req.files || [];
+    console.log("les fichiers: ", photos)
     //Le formdata transforme mon tableau en string
     //Ducoup je le retransforme en tableau
     const stringToArraySkill = JSON.parse(skills);
-    const requestCreated = await CreateRequest({ description, deadline, skills: stringToArraySkill, userId });
+    const requestCreated = await CreateRequest({ description, deadline, skills: stringToArraySkill, userId, photos: photos });
 
     return res.status(200).json(requestCreated);
   } catch (e) {
@@ -67,3 +66,6 @@ export const DeleteById = async (req: Request, res: Response, next: NextFunction
     next(e)
   }
 }
+
+//  '{ [fieldname: string]: Express.Multer.File[]; } | Express.Multer.File[] | undefined' is not assignable to type 
+//       '{ [fieldname: string]: File[]; } | File[] | undefined'
