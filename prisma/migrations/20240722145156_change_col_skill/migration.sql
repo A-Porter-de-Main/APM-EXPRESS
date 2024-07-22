@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Skill" ALTER COLUMN "parentId" SET DATA TYPE TEXT;
