@@ -21,7 +21,6 @@ export function authHandler(roles: string[]): (req: Request, res: Response, next
         if (!token) return res.status(401).end();
         console.log("Decodeur: ", token)
 
-
         const existngUser = await prisma.user.findUnique({where: {id: token.id}})
 
 
