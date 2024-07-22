@@ -11,7 +11,3 @@ authRouter.post('/login', validateData(userLoginSchema), Login);
 authRouter.post('/register', upload.single("photo"), validateData(userRegistrationSchema), Register);
 
 export default authRouter;
-
-
-export default authRouter;
-
