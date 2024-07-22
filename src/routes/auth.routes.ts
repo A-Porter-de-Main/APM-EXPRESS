@@ -12,6 +12,6 @@ authRouter.post('/register', upload.single("photo"), validateData(userRegistrati
 
 export default authRouter;
 
-// authRouter.get('/test', authHandler(["otrerole", "admin"]), test);
 
+export default authRouter;
 

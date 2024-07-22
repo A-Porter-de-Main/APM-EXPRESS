@@ -1,7 +1,47 @@
 import { PrismaClient } from "@prisma/client";
 import { alreadyTakenError, notFoundError } from "./customErrors";
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
+
+/**
+ * Vérifie les valeur de différents champs de n'importe quel model de données
+ * @param field 
+ * @param value 
+ * @param model 
+ * @returns 
+ */
+export const CheckExistingFieldForZod = async (field: string, value: string, model: string): Promise<boolean> => {
+  try {
+
+    let existingValue = undefined;
+    let options = {
+      where: {
+        [field]: value
+      }
+    }
+
+    switch (model) {
+      case "user":
+        existingValue = await prisma.user.findFirst(options);
+        break;
+      case "request":
+        existingValue = await prisma.request.findFirst(options);
+        break;
+      case "skill":
+        existingValue = await prisma.skill.findFirst(options);
+        break;
+      default:
+        break;
+    }
+
+    return existingValue != undefined && existingValue != null;
+  } catch (e) {
+    // console.log(e)
+    return false;
+  }
+
+}
+
 
 /**
  * Fonction qui vérifie si un champ exitse model User (pour vérifier les champs unqiue) et si oui alors throw une Erreur
@@ -73,3 +113,6 @@ export const checkExistingFieldRequestOrThrow = async (
     throw e;
   }
 };
+
+
+

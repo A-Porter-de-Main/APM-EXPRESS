@@ -76,11 +76,13 @@ model Request {
   description String
   deadline    DateTime
   userId   String             @db.Uuid
-  skills   SkillsOnRequests[]
+  skills   SkillsOnRequests[] 
+  // skills   SkillsOnRequests[] 
   pictures RequestPicture[]
   user     User               @relation(fields: [userId], references: [id])
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+
 }
 
 model RequestPicture {
@@ -91,9 +93,9 @@ model RequestPicture {
 }
 
 model SkillsOnRequests {
-  request   Request @relation(fields: [requestId], references: [id])
+  request   Request @relation(fields: [requestId], references: [id], onDelete: Cascade)
   requestId String  @db.Uuid
-  skill     Skill   @relation(fields: [skillId], references: [id])
+  skill     Skill   @relation(fields: [skillId], references: [id], onDelete: Cascade)
   skillId   String  @db.Uuid
 
   @@id([requestId, skillId])
