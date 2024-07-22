@@ -1,5 +1,5 @@
 import { PrismaClient, User } from '@prisma/client';
-import { NoContent, notFoundError } from '../../utils/customErrors';
+import { badRequestError, NoContent, notFoundError } from '../../utils/customErrors';
 import { RequestRegistrationDTO } from '../types/request';
 
 const prisma = new PrismaClient();
@@ -67,11 +67,16 @@ export const CreateRequest = async (requestDto: RequestRegistrationDTO) => {
       picturesData = [{ picturePath: photos.path }]
     }
 
+    //Récupère status open
+    const openStatus = await prisma.requestStatus.findUnique({ where: { code: "OPN" } })
+    if (!openStatus || openStatus === null) return badRequestError("Open status don't exist");
+
     const requestCreated = await prisma.request.create({
       data: {
         description,
         userId,
         deadline,
+        statusId: openStatus.id,
         pictures: {
           create: picturesData
         },
@@ -95,7 +100,7 @@ export const CreateRequest = async (requestDto: RequestRegistrationDTO) => {
 
 export const UpdateRequest = async (requestId: string, requestDto: Partial<RequestRegistrationDTO>) => {
   try {
-    const { description, deadline, skills, userId, photos } = requestDto;
+    const { description, deadline, skills, userId, photos, statusId } = requestDto;
 
     let picturesData: any = [];
 
@@ -112,7 +117,8 @@ export const UpdateRequest = async (requestId: string, requestDto: Partial<Reque
     const dataToUpdate: any = {
       description,
       deadline,
-      userId
+      userId,
+      statusId
     };
 
     if (picturesData.length > 0) {
@@ -154,19 +160,16 @@ export const UpdateRequest = async (requestId: string, requestDto: Partial<Reque
  */
 export const DeleteRequest = async (requestId: string) => {
   try {
-    console.log("ici 3: ", requestId)
 
     const request = await prisma.request.delete({
       where: {
         id: requestId
       }
     })
-    console.log("ici 4")
 
 
     return request;
   } catch (e) {
-    console.log("ici err service ")
 
     throw e;
   }

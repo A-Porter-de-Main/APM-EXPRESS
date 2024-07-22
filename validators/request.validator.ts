@@ -9,7 +9,6 @@ export const createRequestSchema = z.object({
     const existingUser = await CheckExistingFieldForZod("id", val, "user")
 
     if (!existingUser) {
-      console.log("trigger l'erreur bonhomme")
       ctx.addIssue({
         code: "custom",
         message: "User does not exist",
@@ -38,26 +37,6 @@ export const createRequestSchema = z.object({
     }
 
   })
-  // skills: z.string().array().min(1).superRefine(async (val, ctx) => {
-  //   const undefinedSkillsIdArray: string[] = []
-
-  //   for (let i = 0; i < val.length; i++) {
-  //     console.log("Tour: ", i)
-  //     const existingSkills = await CheckExistingFieldForZod("id", val[i], "skill")
-  //     if (!existingSkills) undefinedSkillsIdArray.push(val[i])
-  //     console.log("Tour: ", i, "result: ", existingSkills)
-
-  //   }
-
-  //   if (undefinedSkillsIdArray.length > 0) {
-  //     ctx.addIssue({
-  //       code: "custom",
-  //       message: "User does not exist",
-  //       path: ["skill"]
-  //     })
-  //   }
-
-  // })
 });
 
 /**
@@ -87,7 +66,7 @@ export const patchRequestSchema = z.object({
     if (!existingUser) {
       ctx.addIssue({
         code: "custom",
-        message: "Requet does not exist",
+        message: "Request does not exist",
         path: ["id"]
       })
     }

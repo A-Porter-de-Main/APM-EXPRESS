@@ -1,15 +1,12 @@
-import { PrismaClient } from "@prisma/client";
 import { Request, Response, NextFunction } from 'express';
-import { CreateRequest, DeleteRequest, GetAllRequest, GetOneRequestById, UpdateRequest } from "../services/request.services";
-
-const prisma = new PrismaClient()
+import { CreateResponse, DeleteResponse, GetAllResponse, GetOneResponsetById, UpdateResponse } from "../services/response.services";
 
 
 //Get
 export const GetResponses = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const requests = await GetAllRequest();
-    return res.status(200).json(requests);
+    const responses = await GetAllResponse();
+    return res.status(200).json(responses);
   } catch (e) {
     next(e)
   }
@@ -19,8 +16,8 @@ export const GetResponses = async (req: Request, res: Response, next: NextFuncti
 export const GetOneById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params
-    const request = await GetOneRequestById(id);
-    return res.status(200).json(request);
+    const response = await GetOneResponsetById(id);
+    return res.status(200).json(response);
   } catch (e) {
     next(e)
   }
@@ -30,35 +27,26 @@ export const GetOneById = async (req: Request, res: Response, next: NextFunction
 export const PostResponse = async (req: Request, res: Response, next: NextFunction) => {
   try {
 
-    const { description, deadline, skills, userId, } = req.body;
+    const { userId, requestId } = req.body;
     const photos = req.files ? req.files : undefined;
+    const responseCreated = await CreateResponse({ userId, requestId });
 
-    console.log("les fichiers: ", photos)
-    //Le formdata transforme mon tableau en string
-    //Ducoup je le retransforme en tableau
-    const stringToArraySkill = JSON.parse(skills);
-    const requestCreated = await CreateRequest({ description, deadline, skills: stringToArraySkill, userId, photos: photos });
-
-    return res.status(200).json(requestCreated);
+    return res.status(200).json(responseCreated);
   } catch (e) {
     next(e)
   }
 }
+
 //Update
 export const PatchResponse = async (req: Request, res: Response, next: NextFunction) => {
   try {
 
-    const { description, deadline, skills, userId, } = req.body;
-    const photos = req.files ? req.files : undefined;
+    const { userId, requestId } = req.body;
     const { id } = req.params;
 
-    console.log("les fichiers: ", photos)
-    console.log("les skills: ", skills)
+    const responseUpdated = await UpdateResponse(id, { userId, requestId });
 
-    const stringToArraySkill = skills ? JSON.parse(skills) : undefined;
-    const requestUpdated = await UpdateRequest(id, { description, deadline, skills: stringToArraySkill, userId, photos: photos });
-
-    return res.status(200).json(requestUpdated);
+    return res.status(200).json(responseUpdated);
   } catch (e) {
     next(e)
   }
@@ -70,7 +58,7 @@ export const DeleteById = async (req: Request, res: Response, next: NextFunction
     const { id } = req.params;
     console.log("ici 2")
 
-    const deletedRequest = await DeleteRequest(id)
+    const deletedRequest = await DeleteResponse(id)
 
     return res.status(204).json("");
   } catch (e) {

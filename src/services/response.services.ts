@@ -1,146 +1,86 @@
 import { PrismaClient, User } from '@prisma/client';
 import { NoContent, notFoundError } from '../../utils/customErrors';
-import { RequestRegistrationDTO } from '../types/request';
+import { ResponseRegistrationDTO } from '../types/response';
 
 const prisma = new PrismaClient();
 
 /**
- * Récup toute les demandes
+ * Récup toute les réponses
  * @returns 
  */
-export const GetAllRequest = async () => {
+export const GetAllResponse = async () => {
   try {
-    const requests = await prisma.request.findMany();
+    const response = await prisma.response.findMany();
 
-    if (!requests || requests.length <= 0) {
+    if (!response || response.length <= 0) {
       NoContent();
     }
 
-    return requests;
+    return response;
   } catch (e) {
     throw e;
   }
 }
 
 /**
- * Récupère la demande par son id
- * @param requestId 
+ * Récupère la réponse par son id
+ * @param responsetId 
  * @returns 
  */
-export const GetOneRequestById = async (requestId: string) => {
+export const GetOneResponsetById = async (responseId: string) => {
   try {
-    const request = await prisma.request.findUnique({
-      where: { id: requestId },
+    const response = await prisma.response.findUnique({
+      where: { id: responseId },
       include: {
         user: true,
-        skills: {
-          include: {
-            skill: true
-          }
-        }
+        request: true
       }
     })
 
-    if (!request) {
+    if (!response) {
       notFoundError("Request not found");
     }
-    return request;
+    return response;
   } catch (e) {
     throw e;
   }
 }
 
-//Mettre une validation sur les request ( dont les skills au mooins 1 valide puis aussi verifier le userId qu'il soit valide)
 
-export const CreateRequest = async (requestDto: RequestRegistrationDTO) => {
+export const CreateResponse = async (requestDto: ResponseRegistrationDTO) => {
   try {
-    const { description, deadline, skills, userId, photos } = requestDto;
+    const { userId, requestId } = requestDto;
 
-    let picturesData: any = [];
-
-    //Vérifie si il existe un seul ou plusieurs photos ou pas de photos
-    if (Array.isArray(photos)) {
-      picturesData = photos.map(item => ({
-        picturePath: item.path
-      }));
-    } else if (photos && typeof photos === 'object') {
-      picturesData = [{ picturePath: photos.path }]
-    }
-
-    const requestCreated = await prisma.request.create({
+    const responseCreated = await prisma.response.create({
       data: {
-        description,
         userId,
-        deadline,
-        pictures: {
-          create: picturesData
-        },
-        skills: {
-          create: skills.map(skillId => ({
-            skill: { connect: { id: skillId } }
-          }))
-        }
+        requestId
       },
       include: {
-        skills: true,
-        pictures: true,
+        user: true,
+        request: true,
       }
     })
 
-    return requestCreated;
+    return responseCreated;
   } catch (e) {
     throw e;
   }
 }
 
-export const UpdateRequest = async (requestId: string, requestDto: Partial<RequestRegistrationDTO>) => {
+export const UpdateResponse = async (responseId: string, requestDto: Partial<ResponseRegistrationDTO>) => {
   try {
-    const { description, deadline, skills, userId, photos } = requestDto;
 
-    let picturesData: any = [];
-
-    // Vérifie si il existe un seul ou plusieurs photos ou pas de photos
-    if (Array.isArray(photos)) {
-      picturesData = photos.map(item => ({
-        picturePath: item.path
-      }));
-    } else if (photos && typeof photos === 'object') {
-      picturesData = [{ picturePath: photos.path }];
-    }
-
-
-    const dataToUpdate: any = {
-      description,
-      deadline,
-      userId
-    };
-
-    if (picturesData.length > 0) {
-      dataToUpdate.pictures = {
-        deleteMany: {},
-        create: picturesData
-      };
-    }
-
-    if (skills && skills.length > 0) {
-      dataToUpdate.skills = {
-        deleteMany: {},
-        create: skills.map(skillId => ({
-          skill: { connect: { id: skillId } }
-        }))
-      };
-    }
-
-    const requestUpdated = await prisma.request.update({
-      where: { id: requestId },
-      data: dataToUpdate,
+    const responseUpdated = await prisma.response.update({
+      where: { id: responseId },
+      data: requestDto,
       include: {
-        skills: true,
-        pictures: true,
+        user: true,
+        request: true,
       }
     });
 
-    return requestUpdated;
+    return responseUpdated;
   } catch (e) {
     throw e;
   }
@@ -148,26 +88,22 @@ export const UpdateRequest = async (requestId: string, requestDto: Partial<Reque
 
 
 /**
- * Supprime la demande avec son id
+ * Supprime la response avec son id
  * @param requestId 
  * @returns 
  */
-export const DeleteRequest = async (requestId: string) => {
+export const DeleteResponse = async (responseId: string) => {
   try {
-    console.log("ici 3: ", requestId)
 
-    const request = await prisma.request.delete({
+    const response = await prisma.response.delete({
       where: {
-        id: requestId
+        id: responseId
       }
     })
-    console.log("ici 4")
 
 
-    return request;
+    return response;
   } catch (e) {
-    console.log("ici err service ")
-
     throw e;
   }
 }

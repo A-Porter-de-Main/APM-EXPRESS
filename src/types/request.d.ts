@@ -7,5 +7,6 @@ export interface RequestRegistrationDTO {
   deadline: Datetime,
   userId: string,
   skills: string[],
+  statusId?: string,
   photos: { [fieldname: string]: Express.Multer.File[]; } | Express.Multer.File[] | undefined,
 }

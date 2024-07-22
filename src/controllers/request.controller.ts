@@ -1,8 +1,9 @@
-import { PrismaClient } from "@prisma/client";
 import { Request, Response, NextFunction } from 'express';
 import { CreateRequest, DeleteRequest, GetAllRequest, GetOneRequestById, UpdateRequest } from "../services/request.services";
 
-const prisma = new PrismaClient()
+//Todo => ajouter les nouveaux champ dans les crud et update
+//Status => créer un seeding "ouvert", "fermer","en cours" et par defaut mettre le status sur ouvert
+//  => faire la création d'une response sur la requête, donc quand je mdoifie une requete je veux pouvoir virer les responses
 
 
 //Get
