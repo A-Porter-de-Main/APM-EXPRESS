@@ -2,12 +2,14 @@ import { PrismaClient } from "@prisma/client";
 import { RoleCreateDTO } from "../src/types/role";
 import { disconnectPrisma } from "../utils/disconnectPrismaClient";
 import { skills } from "../data/skills"
+import { requestStatus } from "../data/requestStatus"
 const prisma = new PrismaClient();
 
 
 async function main(callback: () => void) {
   await SeedRoles()
   await SeedSkills()
+  await SeedRequesStatus()
 
   callback()
 }
@@ -30,7 +32,22 @@ const SeedRoles = async () => {
 
 }
 
+const SeedRequesStatus = async () => {
+
+  console.log("Starting Seed RequestStatus")
+
+
+  requestStatus.map(async (status) => {
+    let findExisting = await prisma.requestStatus.findUnique({ where: { code: status.code } })
+    if (findExisting) return;
+    const createdRole = await prisma.requestStatus.create({ data: status })
+  })
+  console.log("RequestStatus Seeding Success")
+
+}
+
 const SeedSkills = async () => {
+  console.log("Starting Seed Skills")
 
   const copySkills = [...skills];
 
@@ -55,7 +72,7 @@ const SeedSkills = async () => {
 
   }
 
-  console.log("Role Seeding Success")
+  console.log("Skill Seeding Success")
 
 }
 

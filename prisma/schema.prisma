@@ -38,6 +38,7 @@ model User {
   issues               Issue[]
   objects              ObjectModel[]
   skills               SkillsOnUsers[]
+  responses            Response[]
 }
 
 model SkillsOnUsers {
@@ -62,6 +63,7 @@ model Address {
   longitude Float
   zipCode   String
   street    String
+  city      String?
   user      User   @relation(fields: [userId], references: [id])
 }
 
@@ -71,6 +73,16 @@ model Preference {
   user   User   @relation(fields: [userId], references: [id])
 }
 
+model Response {
+  id          String   @id @default(uuid()) @db.Uuid
+  userId    String  @db.Uuid
+  requestId    String  @db.Uuid
+  
+  user     User               @relation(fields: [userId], references: [id])
+  request     Request               @relation(fields: [requestId], references: [id])
+
+}
+
 model Request {
   id          String   @id @default(uuid()) @db.Uuid
   description String
@@ -78,11 +90,23 @@ model Request {
   userId   String             @db.Uuid
   skills   SkillsOnRequests[] 
   pictures RequestPicture[]
-  user     User               @relation(fields: [userId], references: [id])
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+  statusId  String @db.Uuid
 
+  user     User               @relation(fields: [userId], references: [id])
+  status RequestStatus @relation(fields: [statusId], references: [id])
+  responses   Response[]
 }
+
+model RequestStatus {
+  id          String   @id @default(uuid()) @db.Uuid
+  name  String @unique
+  code  String @unique
+
+  request   Request[]
+}
+
 
 model RequestPicture {
   id          String  @id @default(uuid()) @db.Uuid

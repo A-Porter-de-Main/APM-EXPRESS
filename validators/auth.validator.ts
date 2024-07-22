@@ -9,6 +9,7 @@ export const userRegistrationSchema = z.object({
   longitude: z.string().min(1),
   zipCode: z.string().min(1),
   street: z.string().min(1),
+  city: z.string().min(1),
   email: z.string().email().min(1),
   password: z.string().min(8),
   phone: z.string().regex(phoneNumberRegex, "invalid phone number"),
