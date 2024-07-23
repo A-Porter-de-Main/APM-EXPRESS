@@ -10,7 +10,7 @@ const prisma = new PrismaClient();
  */
 export const GetAllRequest = async () => {
   try {
-    const requests = await prisma.request.findMany();
+    const requests = await prisma.request.findMany({ include: { responses: { include: { user: true } } } });
 
     if (!requests || requests.length <= 0) {
       NoContent();
@@ -35,9 +35,14 @@ export const GetOneRequestById = async (requestId: string) => {
         user: true,
         skills: {
           include: {
-            skill: true
+            skill: true,
           }
-        }
+        },
+        responses: {
+          include: {
+            user: true
+          }
+        },
       }
     })
 
@@ -89,6 +94,7 @@ export const CreateRequest = async (requestDto: RequestRegistrationDTO) => {
       include: {
         skills: true,
         pictures: true,
+        responses: true
       }
     })
 

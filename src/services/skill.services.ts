@@ -1,4 +1,4 @@
-import { PrismaClient, User } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { NoContent, notFoundError } from '../../utils/customErrors';
 
 const prisma = new PrismaClient();

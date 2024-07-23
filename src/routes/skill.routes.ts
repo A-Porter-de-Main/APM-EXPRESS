@@ -1,10 +1,10 @@
 import { Router } from 'express';
 import { authHandler } from '../../middlewares/authMiddlewares';
 import { GetOneById, GetSkills } from '../controllers/skill.controller';
-const skill = Router();
+const skillRouter = Router();
 
-skill.get('/', authHandler(["admin", "user"]), GetSkills);
-skill.get('/:id', authHandler(["admin", "user"]), GetOneById);
+skillRouter.get('/', authHandler(["admin", "user"]), GetSkills);
+skillRouter.get('/:id', authHandler(["admin", "user"]), GetOneById);
 
 
-export default skill;
+export default skillRouter;

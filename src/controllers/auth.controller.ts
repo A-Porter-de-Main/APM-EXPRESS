@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { PrismaClient } from '@prisma/client';
-import { AuthenticateUser, CreateUser, } from '../services/auth.services';
+import { AuthenticateUser, CreateUser, GetAllUsers, } from '../services/auth.services';
 
 const prisma = new PrismaClient();
 
@@ -40,10 +40,10 @@ export const Register = async (req: Request, res: Response, next: NextFunction) 
   }
 };
 
-export const test = async (req: Request, res: Response, next: NextFunction) => {
+export const GetAll = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    console.log("la fonction trql")
-    res.status(200).json({ message: 'tqt fraté' })
+    const users = await GetAllUsers();
+    res.status(200).json(users)
   } catch (e) {
     next(e)
   }

@@ -11,7 +11,7 @@ async function main(callback: () => void) {
   await SeedSkills()
   await SeedRequesStatus()
 
-  callback()
+  callback();
 }
 
 const SeedRoles = async () => {
@@ -52,7 +52,8 @@ const SeedSkills = async () => {
   const copySkills = [...skills];
 
   for (const item of copySkills) {
-    let findExisting = await prisma.skill.findUnique({ where: { id: item.id } })
+    let findExisting = await prisma.skill.findUnique({ where: { name: item.name } })
+
     if (findExisting) return;
     const oldId = item.id;
 

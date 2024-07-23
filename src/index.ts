@@ -5,6 +5,7 @@ import authRouter from "./routes/auth.routes";
 import requestRouter from "./routes/request.routes";
 import responseRouter from "./routes/response.routes";
 import { errorHandler } from "../middlewares/errorMiddlewares";
+import skillRouter from "./routes/skill.routes";
 
 const app = express()
 const port = process.env.PORT || 80;
@@ -24,6 +25,7 @@ app.use("/uploads", express.static("./uploads"));
 app.use("/auth", authRouter)
 app.use("/request", requestRouter)
 app.use("/response", responseRouter)
+app.use("/skill", skillRouter)
 
 app.use(errorHandler)
 

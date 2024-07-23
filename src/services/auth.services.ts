@@ -2,10 +2,10 @@ import { PrismaClient, User } from '@prisma/client';
 import jwt from 'jsonwebtoken';
 import bcrypt from "bcrypt"
 import { UserLoginDTO, UserRegistrationDTO, UserTokenInfosDTO } from '../types/user';
-import { alreadyTakenError, badCredentialsError, notFoundError, serverError } from '../../utils/customErrors';
 import { CheckExistingField, CheckExistingFieldOrThrow } from '../../utils/checkFields';
 import { FindRoleId } from '../../utils/findRole';
 import { AddressDTO } from '../types/address';
+import { badCredentialsError, NoContent, notFoundError } from '../../utils/customErrors';
 
 const prisma = new PrismaClient();
 
@@ -111,3 +111,18 @@ export const CreateUser = async (userData: UserRegistrationDTO) => {
   }
 }
 
+//GetAllUser dev route
+export const GetAllUsers = async () => {
+  try {
+
+    const user = await prisma.user.findMany()
+
+    if (!user) {
+      NoContent();
+    }
+    return user;
+
+  } catch (e) {
+    throw e;
+  }
+}
