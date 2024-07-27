@@ -51,7 +51,6 @@ const Register = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
 exports.Register = Register;
 const test = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log("la fonction trql");
         res.status(200).json({ message: 'tqt fraté' });
     }
     catch (e) {

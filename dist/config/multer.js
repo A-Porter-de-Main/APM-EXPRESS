@@ -10,7 +10,6 @@ const path_1 = __importDefault(require("path"));
 const uploadsDir = "uploads";
 exports.fileStorage = multer_1.default.diskStorage({
     destination: (req, file, callback) => {
-        console.log("le filename originlaaaaaa: ", file.originalname);
         callback(null, uploadsDir);
         // callback(null, path);
     },
@@ -18,7 +17,6 @@ exports.fileStorage = multer_1.default.diskStorage({
         const uuid = (0, uuid_1.v4)();
         const ext = path_1.default.extname(file.originalname);
         const newFileName = uuid + ext;
-        console.log("new file name: ", newFileName);
         callback(null, newFileName);
     },
 });

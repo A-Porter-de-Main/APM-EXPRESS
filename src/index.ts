@@ -9,10 +9,11 @@ import skillRouter from "./routes/skill.routes";
 
 const app = express()
 const port = process.env.PORT || 80;
-const allowedOrigins = ['http://localhost:3000']; 
+const allowedOrigins = ['http://localhost:3000','http://localhost:3001', ];
 
 const options: cors.CorsOptions = {
-    origin: allowedOrigins
+    origin: allowedOrigins,
+    credentials: true,
 };
 
 app.use(cors(options))

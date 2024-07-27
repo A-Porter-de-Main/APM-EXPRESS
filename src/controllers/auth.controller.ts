@@ -6,19 +6,22 @@ const prisma = new PrismaClient();
 
 /**
  * [POST] Fonction de connexion
- * @param req 
- * @param res 
+ * @param req
+ * @param res
+ * @param next
  * @returns Json
  */
-export const Login = async (req: Request, res: Response, next: NextFunction) => {
+export const Login = async (req: Request, res: Response) : Promise<Response> => {
   try {
     const { email, password } = req.body;
-    const loggedUser = await AuthenticateUser({ email, password })
-    res.json(loggedUser)
+    const loggedUser = await AuthenticateUser({ email, password });
+    return res.json(loggedUser);
   } catch (e) {
-    next(e)
+    // You can also throw the error if you want to handle it somewhere else
+    throw e;
   }
 };
+
 
 /**
  * [POST] Inscription utilisateur

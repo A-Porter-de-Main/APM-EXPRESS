@@ -3,6 +3,9 @@ import { RoleCreateDTO } from "../src/types/role";
 import { disconnectPrisma } from "../utils/disconnectPrismaClient";
 import { skills } from "../data/skills"
 import { requestStatus } from "../data/requestStatus"
+import dotenv from 'dotenv';
+import bcrypt from "bcrypt";
+dotenv.config();
 const prisma = new PrismaClient();
 
 
@@ -10,6 +13,7 @@ async function main(callback: () => void) {
   await SeedRoles()
   await SeedSkills()
   await SeedRequesStatus()
+  await SeedAdmin()
 
   callback();
 }
@@ -29,6 +33,48 @@ const SeedRoles = async () => {
     const createdRole = await prisma.role.create({ data: role })
   })
   console.log("Role Seeding Success")
+
+}
+const SeedAdmin = async () => {
+    console.log("Starting Seed Admin")
+
+    const adminEmail = process.env.ADMIN_EMAIL;
+    if (!adminEmail) {
+      throw new Error('ADMIN_EMAIL environment variable is not defined.');
+    }
+    
+    const findAdmin = await prisma.user.findUnique({ 
+      where: {
+        email: adminEmail
+      },
+    })
+
+    if (findAdmin) return;
+    const getAdminRole = await prisma.role.findUnique({ where: { name: "admin" } })
+    if(!getAdminRole) return;
+    const encryptPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD as string, 10)
+    const createdAdmin = await prisma.user.create({
+      data: {
+        email: process.env.ADMIN_EMAIL as string,
+        password: encryptPassword,
+        roleId: getAdminRole.id as string,
+        firstName: "Admin",
+        lastName: "Admin",
+        addresses: {
+        create: {
+        latitude: 0,
+        longitude: 0,
+        street: "Admin",
+        zipCode: "00000",
+        city: "Admin",
+        },
+        },
+        phone: "0000000000",
+        picturePath: "/uploads/placeholder.jpg",
+        
+      }
+    })
+    console.log("Admin Seeding Success")
 
 }
 

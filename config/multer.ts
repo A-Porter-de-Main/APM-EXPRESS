@@ -6,13 +6,13 @@ import path from "path"
 const uploadsDir = "uploads";
 
 export const fileStorage = multer.diskStorage({
+  
 
   destination: (
     req: Express.Request,
     file: Express.Multer.File,
     callback: (error: Error | null, destination: string) => void
   ): void => {
-    console.log("le filename originlaaaaaa: ", file.originalname)
     callback(null, uploadsDir);
     // callback(null, path);
   },
@@ -25,7 +25,6 @@ export const fileStorage = multer.diskStorage({
     const uuid = uuidv4();
     const ext = path.extname(file.originalname);
     const newFileName = uuid + ext;
-    console.log("new file name: ", newFileName)
     callback(null, newFileName);
   },
 
@@ -51,7 +50,7 @@ export const fileFilter = (
 const upload = multer({
   storage: fileStorage,
   fileFilter: fileFilter,
-  limits: { fileSize: 1024 * 1024 * 5 } // 5 MB
+  limits: { fileSize: 5000000 } // 5 MB
 });
 
 export default upload;

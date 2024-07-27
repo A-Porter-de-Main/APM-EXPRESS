@@ -57,14 +57,14 @@ model Role {
 }
 
 model Address {
-  id        String @id @default(uuid()) @db.Uuid
-  userId    String @db.Uuid
+  id        String  @id @default(uuid()) @db.Uuid
+  userId    String  @db.Uuid
   latitude  Float
   longitude Float
   zipCode   String
   street    String
   city      String?
-  user      User   @relation(fields: [userId], references: [id])
+  user      User    @relation(fields: [userId], references: [id])
 }
 
 model Preference {
@@ -74,39 +74,37 @@ model Preference {
 }
 
 model Response {
-  id          String   @id @default(uuid()) @db.Uuid
-  userId    String  @db.Uuid
-  requestId    String  @db.Uuid
-  
-  user     User               @relation(fields: [userId], references: [id])
-  request     Request               @relation(fields: [requestId], references: [id])
+  id        String @id @default(uuid()) @db.Uuid
+  userId    String @db.Uuid
+  requestId String @db.Uuid
 
+  user    User    @relation(fields: [userId], references: [id])
+  request Request @relation(fields: [requestId], references: [id])
 }
 
 model Request {
-  id          String   @id @default(uuid()) @db.Uuid
+  id          String             @id @default(uuid()) @db.Uuid
   description String
   deadline    DateTime
-  userId   String             @db.Uuid
-  skills   SkillsOnRequests[] 
-  pictures RequestPicture[]
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  statusId  String @db.Uuid
+  userId      String             @db.Uuid
+  skills      SkillsOnRequests[]
+  pictures    RequestPicture[]
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+  statusId    String             @db.Uuid
 
-  user     User               @relation(fields: [userId], references: [id])
-  status RequestStatus @relation(fields: [statusId], references: [id])
-  responses   Response[]
+  user      User          @relation(fields: [userId], references: [id])
+  status    RequestStatus @relation(fields: [statusId], references: [id])
+  responses Response[]
 }
 
 model RequestStatus {
-  id          String   @id @default(uuid()) @db.Uuid
-  name  String @unique
-  code  String @unique
+  id   String @id @default(uuid()) @db.Uuid
+  name String @unique
+  code String @unique
 
-  request   Request[]
+  request Request[]
 }
-
 
 model RequestPicture {
   id          String  @id @default(uuid()) @db.Uuid
@@ -120,16 +118,15 @@ model SkillsOnRequests {
   requestId String  @db.Uuid
   skill     Skill   @relation(fields: [skillId], references: [id], onDelete: Cascade)
   skillId   String  @db.Uuid
-  
 
   @@id([requestId, skillId])
 }
 
 model Skill {
-  id       String             @id @default(uuid()) @db.Uuid
-  name     String   @unique()
-  description String 
-  parentId String?
+  id          String  @id @default(uuid()) @db.Uuid
+  name        String  @unique()
+  description String
+  parentId    String?
 
   requests SkillsOnRequests[]
   users    SkillsOnUsers[]

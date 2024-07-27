@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
  * @returns 
  */
 export const GetAllSkills = async () => {
-  try {
+  
     const skills = await prisma.skill.findMany();
 
     if (!skills || skills.length <= 0) {
@@ -16,9 +16,6 @@ export const GetAllSkills = async () => {
     }
 
     return skills;
-  } catch (e) {
-    throw e;
-  }
 }
 
 /**
@@ -27,17 +24,14 @@ export const GetAllSkills = async () => {
  * @returns 
  */
 export const GetOneSkilltById = async (skillId: string) => {
-  try {
+  
     const skill = await prisma.skill.findUnique({
       where: { id: skillId },
     })
 
     if (!skill) {
-      notFoundError("Request not found");
+      notFoundError("Skill not found");
     }
     return skill;
-  } catch (e) {
-    throw e;
-  }
 }
 

@@ -24,7 +24,6 @@ function authHandler(roles) {
         let token = (0, jsonwebtoken_1.decode)(authBearer);
         if (!token)
             return res.status(401).end();
-        console.log("Decodeur: ", token);
         const existngUser = yield prisma.user.findUnique({ where: { id: token.id } });
         if (roles.includes(token.role) && existngUser) {
             next();

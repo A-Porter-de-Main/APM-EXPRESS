@@ -39,7 +39,6 @@ export const AuthenticateUser = async (credentials: UserLoginDTO) => {
         role: true
       }
     })
-
     if (!user || !(await bcrypt.compare(password, user.password))) {
       badCredentialsError("Email or Password invalid");
     }
@@ -59,8 +58,6 @@ export const AuthenticateUser = async (credentials: UserLoginDTO) => {
 export const CreateUser = async (userData: UserRegistrationDTO) => {
   try {
     const { firstName, lastName, description, email, phone, password, stripeUserId, picturePath, longitude, latitude, street, zipCode } = userData;
-    console.log(userData);
-
     //Vérifie si Phone et Email existe 
     const isPhoneAlreadyExist = await CheckExistingField("phone", phone);
     const isEmailAlreadyExist = await CheckExistingField("email", email);

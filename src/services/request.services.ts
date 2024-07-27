@@ -1,6 +1,6 @@
-import { PrismaClient, User } from '@prisma/client';
-import { badRequestError, NoContent, notFoundError } from '../../utils/customErrors';
-import { RequestRegistrationDTO } from '../types/request';
+import {PrismaClient} from '@prisma/client';
+import {badRequestError, NoContent, notFoundError} from '../../utils/customErrors';
+import {RequestRegistrationDTO} from '../types/request';
 
 const prisma = new PrismaClient();
 
@@ -10,9 +10,9 @@ const prisma = new PrismaClient();
  */
 export const GetAllRequest = async () => {
   try {
-    const requests = await prisma.request.findMany({ include: { responses: { include: { user: true } } } });
+    const requests = await prisma.request.findMany({ include: { responses: { include: { user: true } } } as any });
 
-    if (!requests || requests.length <= 0) {
+    if (!requests || requests.length === 0) {
       NoContent();
     }
 
@@ -62,7 +62,6 @@ export const CreateRequest = async (requestDto: RequestRegistrationDTO) => {
     const { description, deadline, skills, userId, photos } = requestDto;
 
     let picturesData: any = [];
-
     //Vérifie si il existe un seul ou plusieurs photos ou pas de photos
     if (Array.isArray(photos)) {
       picturesData = photos.map(item => ({
@@ -74,9 +73,9 @@ export const CreateRequest = async (requestDto: RequestRegistrationDTO) => {
 
     //Récupère status open
     const openStatus = await prisma.requestStatus.findUnique({ where: { code: "OPN" } })
-    if (!openStatus || openStatus === null) return badRequestError("Open status don't exist");
+    if (!openStatus) return badRequestError("Open status don't exist");
 
-    const requestCreated = await prisma.request.create({
+    return await prisma.request.create({
       data: {
         description,
         userId,
@@ -87,7 +86,7 @@ export const CreateRequest = async (requestDto: RequestRegistrationDTO) => {
         },
         skills: {
           create: skills.map(skillId => ({
-            skill: { connect: { id: skillId } }
+            skill: {connect: {id: skillId}}
           }))
         }
       },
@@ -96,9 +95,7 @@ export const CreateRequest = async (requestDto: RequestRegistrationDTO) => {
         pictures: true,
         responses: true
       }
-    })
-
-    return requestCreated;
+    });
   } catch (e) {
     throw e;
   }
@@ -143,16 +140,14 @@ export const UpdateRequest = async (requestId: string, requestDto: Partial<Reque
       };
     }
 
-    const requestUpdated = await prisma.request.update({
-      where: { id: requestId },
+    return await prisma.request.update({
+      where: {id: requestId},
       data: dataToUpdate,
       include: {
         skills: true,
         pictures: true,
       }
     });
-
-    return requestUpdated;
   } catch (e) {
     throw e;
   }
@@ -167,14 +162,11 @@ export const UpdateRequest = async (requestId: string, requestDto: Partial<Reque
 export const DeleteRequest = async (requestId: string) => {
   try {
 
-    const request = await prisma.request.delete({
+    return await prisma.request.delete({
       where: {
         id: requestId
       }
-    })
-
-
-    return request;
+    });
   } catch (e) {
 
     throw e;
