@@ -33,6 +33,9 @@ export const CheckExistingFieldForZod = async (field: string, value: string, mod
       case "skill":
         existingValue = await prisma.skill.findFirst(options);
         break;
+      case "chat":
+        existingValue = await prisma.skill.findFirst(options);
+        break;
       default:
         break;
     }

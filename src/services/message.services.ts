@@ -55,3 +55,49 @@ export const GetOneMessageById = async (messageId: string) => {
   return chat;
 }
 
+
+// export const CreateMessage = async (requestDto: RequestRegistrationDTO) => {
+//   try {
+//     const { description, deadline, skills, userId, photos } = requestDto;
+
+//     let picturesData: any = [];
+//     //Vérifie si il existe un seul ou plusieurs photos ou pas de photos
+//     if (Array.isArray(photos)) {
+//       picturesData = photos.map(item => ({
+//         picturePath: item.path
+//       }));
+//     } else if (photos && typeof photos === 'object') {
+//       picturesData = [{ picturePath: photos.path }]
+//     }
+
+
+//     //Récupère status open
+//     const openStatus = await prisma.requestStatus.findUnique({ where: { code: "OPN" } })
+//     if (!openStatus) return badRequestError("Open status don't exist");
+
+//     return await prisma.request.create({
+//       data: {
+//         description,
+//         userId,
+//         deadline,
+//         statusId: openStatus.id,
+//         pictures: {
+//           create: picturesData
+//         },
+//         skills: {
+//           create: {
+//             skill: { connect: { id: skills } }
+//           }
+//         }
+
+//       },
+//       include: {
+//         skills: true,
+//         pictures: true,
+//         responses: true
+//       }
+//     });
+//   } catch (e) {
+//     throw e;
+//   }
+// }

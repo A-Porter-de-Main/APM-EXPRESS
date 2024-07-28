@@ -6,15 +6,14 @@ import path from "path"
 const uploadsDir = "uploads";
 
 export const fileStorage = multer.diskStorage({
-  
 
   destination: (
     req: Express.Request,
     file: Express.Multer.File,
     callback: (error: Error | null, destination: string) => void
   ): void => {
+
     callback(null, uploadsDir);
-    // callback(null, path);
   },
 
   filename: (
@@ -25,6 +24,7 @@ export const fileStorage = multer.diskStorage({
     const uuid = uuidv4();
     const ext = path.extname(file.originalname);
     const newFileName = uuid + ext;
+
     callback(null, newFileName);
   },
 
@@ -50,7 +50,7 @@ export const fileFilter = (
 const upload = multer({
   storage: fileStorage,
   fileFilter: fileFilter,
-  limits: { fileSize: 5000000 } // 5 MB
+  limits: { fileSize: 1024 * 1024 * 5 } // 5 MB
 });
 
 export default upload;
