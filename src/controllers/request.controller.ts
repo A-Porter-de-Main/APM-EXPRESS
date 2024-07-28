@@ -34,7 +34,13 @@ export const PostRequest = async (req: Request, res: Response, next: NextFunctio
     const { description, deadline, skills, userId, } = req.body;
     const photos = req.files ? req.files : undefined;
 
-    const requestCreated = await CreateRequest({ description, deadline, skills, userId, photos: photos });
+    console.log("les fichiers: ", photos)
+    //Le formdata transforme mon tableau en string
+    //Ducoup je le retransforme en tableau
+    // const stringToArraySkill = JSON.parse(skills);
+    // console.log("skills before: ", typeof skills)
+    // console.log("skills after: ", typeof stringToArraySkill)
+    const requestCreated = await CreateRequest({ description, deadline, skills: skills, userId, photos: photos });
 
     return res.status(200).json(requestCreated);
   } catch (e) {

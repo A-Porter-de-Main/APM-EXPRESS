@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { z, ZodError } from 'zod';
 
-
 /**
  * Middleware de validation synchrone, lorsque l'on vérifie uniquement que le format des données sont bons et que les données essentiel sont renseigner
  * @param schema 

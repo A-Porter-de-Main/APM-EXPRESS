@@ -1,6 +1,7 @@
 import { PrismaClient, User } from '@prisma/client';
-import { NoContent, notFoundError } from '../../utils/customErrors';
+import { badRequestError, NoContent, notFoundError } from '../../utils/customErrors';
 import { ResponseRegistrationDTO } from '../types/response';
+import { CheckExistingFieldForZod } from '../../utils/checkFields';
 
 const prisma = new PrismaClient();
 
@@ -33,7 +34,8 @@ export const GetOneResponsetById = async (responseId: string) => {
       where: { id: responseId },
       include: {
         user: true,
-        request: true
+        request: true,
+        chat: true
       }
     })
 
@@ -50,15 +52,46 @@ export const GetOneResponsetById = async (responseId: string) => {
 export const CreateResponse = async (requestDto: ResponseRegistrationDTO) => {
   try {
     const { userId, requestId } = requestDto;
+    let otpions;
+    //ICI, vérifier que la demande ne dispose pas déjà d'une response avec le meme user id
+    //PUIS, vérifier si il existe déjà un chat entre les deux users si oui, ne rien faire sinon en créer un 
+
+    const existingChat = await prisma.chat.findFirst({
+      where: {
+        requestId: requestId, response: {
+          userId: userId
+        }
+      }
+    })
+
+    const exsitingResponse = await prisma.response.findFirst({ where: { userId: userId, requestId: requestId } })
+    // if(!existingChat) 
+
+    if(exsitingResponse ) badRequestError("User have already response to this request")
+
+    // if(existingChat) {
+    //   options = {chat: {
+    //     create: {
+          
+    //     }
+    //   } }
+    // }
+
 
     const responseCreated = await prisma.response.create({
       data: {
         userId,
-        requestId
+        requestId,
+        chat: {
+          create: {
+            requestId: requestId,
+          }
+        }
       },
       include: {
         user: true,
         request: true,
+        chat: true
       }
     })
 

@@ -80,6 +80,7 @@ model Response {
 
   user    User    @relation(fields: [userId], references: [id])
   request Request @relation(fields: [requestId], references: [id])
+  chat Chat?
 }
 
 model Request {
@@ -96,6 +97,7 @@ model Request {
   user      User          @relation(fields: [userId], references: [id])
   status    RequestStatus @relation(fields: [statusId], references: [id])
   responses Response[]
+  chats Chat[]
 }
 
 model RequestStatus {
@@ -155,3 +157,36 @@ model ObjectModel {
   userId String @db.Uuid
   user   User   @relation(fields: [userId], references: [id])
 }
+
+
+model Chat {
+    id     String @id @default(uuid()) @db.Uuid
+
+    requestId String @db.Uuid
+    responseId String @db.Uuid @unique
+
+ request  Request  @relation(fields: [requestId], references: [id])
+  response  Response  @relation(fields: [responseId], references: [id])    
+    messages Message[]
+}
+
+model Message {
+  id     String @id @default(uuid()) @db.Uuid
+  content       String
+  createdAt     DateTime    @default(now())
+  senderId      String      @db.Uuid // ID de l'utilisateur qui envoie le message
+  receiverId    String      @db.Uuid // ID de l'utilisateur qui reçoit le message
+  chatId String   @db.Uuid
+  
+  
+  chat  Chat  @relation(fields: [chatId], references: [id])
+  }
+
+// model Message {
+//   id            String      @id @default(auto()) @map("_id") @db.ObjectId
+//   content       String
+//   createdAt     DateTime    @default(now())
+//   senderId      String      @db.ObjectId // ID de l'utilisateur qui envoie le message
+//   receiverId    String      @db.ObjectId // ID de l'utilisateur qui reçoit le message
+//   chatId String 
+// }

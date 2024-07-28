@@ -18,14 +18,9 @@ export const createRequestSchema = z.object({
   skills: z.string().min(1).superRefine(async (val, ctx) => {
     const undefinedSkillsIdArray: string[] = []
 
-    //Le formdata transforme mon tableau en string
-    //Ducoup je le retransforme en tableau
-    const stringToArraySkill = JSON.parse(val);
 
-    for (let i = 0; i < stringToArraySkill.length; i++) {
-      const existingSkills = await CheckExistingFieldForZod("id", stringToArraySkill[i], "skill")
-      if (!existingSkills) undefinedSkillsIdArray.push(stringToArraySkill[i])
-    }
+    const existingSkills = await CheckExistingFieldForZod("id", val, "skill")
+    if (!existingSkills) undefinedSkillsIdArray.push(val)
 
     if (undefinedSkillsIdArray.length > 0) {
       ctx.addIssue({

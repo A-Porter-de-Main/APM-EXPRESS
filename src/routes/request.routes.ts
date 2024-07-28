@@ -9,7 +9,7 @@ const requestRouter = Router();
 
 requestRouter.get('/', authHandler(["admin", "user"]), GetRequests);
 requestRouter.get('/:id', authHandler(["admin", "user"]), GetOneById);
-requestRouter.post('/', authHandler(["admin", "user"]), upload.array("photos"), PostRequest);
+requestRouter.post('/', authHandler(["admin", "user"]), upload.array("photos"), validateDataAsync(createRequestSchema), PostRequest);
 requestRouter.patch('/:id', authHandler(["admin", "user"]), upload.array("photos"), validateParamsAsync(patchRequestSchema), PatchRequest);
 requestRouter.delete('/:id', authHandler(["admin", "user"]), validateParamsAsync(deleteRequestSchema), DeleteById);
 

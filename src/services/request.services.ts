@@ -1,6 +1,6 @@
 import {PrismaClient} from '@prisma/client';
 import {badRequestError, NoContent, notFoundError} from '../../utils/customErrors';
-import {RequestRegistrationDTO} from '../types/request';
+import { RequestPacthDTO, RequestRegistrationDTO } from '../types/request';
 
 const prisma = new PrismaClient();
 
@@ -55,8 +55,6 @@ export const GetOneRequestById = async (requestId: string) => {
   }
 }
 
-//Mettre une validation sur les request ( dont les skills au mooins 1 valide puis aussi verifier le userId qu'il soit valide)
-
 export const CreateRequest = async (requestDto: RequestRegistrationDTO) => {
   try {
     const { description, deadline, skills, userId, photos } = requestDto;
@@ -70,6 +68,7 @@ export const CreateRequest = async (requestDto: RequestRegistrationDTO) => {
     } else if (photos && typeof photos === 'object') {
       picturesData = [{ picturePath: photos.path }]
     }
+
 
     //Récupère status open
     const openStatus = await prisma.requestStatus.findUnique({ where: { code: "OPN" } })
@@ -85,10 +84,15 @@ export const CreateRequest = async (requestDto: RequestRegistrationDTO) => {
           create: picturesData
         },
         skills: {
-          create: skills.map(skillId => ({
-            skill: {connect: {id: skillId}}
-          }))
+          create: {
+            skill: { connect: { id: skills } }
+          }
         }
+        // skills: {
+        //   create: skills.map(skillId => ({
+        //     skill: {connect: {id: skillId}}
+        //   }))
+        // }
       },
       include: {
         skills: true,
@@ -101,7 +105,7 @@ export const CreateRequest = async (requestDto: RequestRegistrationDTO) => {
   }
 }
 
-export const UpdateRequest = async (requestId: string, requestDto: Partial<RequestRegistrationDTO>) => {
+export const UpdateRequest = async (requestId: string, requestDto: Partial<RequestPacthDTO>) => {
   try {
     const { description, deadline, skills, userId, photos, statusId } = requestDto;
 
