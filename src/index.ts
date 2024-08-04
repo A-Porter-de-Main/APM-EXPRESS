@@ -8,6 +8,7 @@ import { errorHandler } from "../middlewares/errorMiddlewares";
 import skillRouter from "./routes/skill.routes";
 import chatRouter from "./routes/chat.routes";
 import messageRouter from "./routes/message.routes";
+import { pusher } from "../utils/pusher";
 
 const app = express()
 const port = process.env.PORT || 80;
@@ -33,6 +34,26 @@ app.use("/chat", chatRouter)
 app.use("/message", messageRouter)
 
 app.use(errorHandler)
+
+// ...app.use statements
+
+// app.post("/pusher/auth", (req, res) => {
+//     const socketId = req.body.socket_id;
+//     const channel = req.body.channel_name;
+//     const username = "admin";
+
+
+//     const authResponse = pusher.authorizeChannel(socketId, channel);
+//     res.json({
+//         ...authResponse,
+//         //   channel_data: JSON.stringify(user),
+//     });
+// });
+
+
+
+// ...rest of code
+
 
 
 app.listen(port, () => {

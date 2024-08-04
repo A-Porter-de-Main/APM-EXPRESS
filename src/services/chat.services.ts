@@ -16,25 +16,90 @@ export const GetAllChats = async () => {
           createdAt: "desc",
         },
         take: 1,
+      },
+      request: {
+        select: { user: true },
+        include: {
+          user: true
+        }
       }
     }
   });
-  // const chats = await prisma.chat.groupBy({
-  //   by: [""]
-  // });
-  // include: {
-  //   messages: {
-  //     take: 1,
-  //     orderBy: {
-  //       createdAt: 'desc'
-  //     }
-  //   }
-  // }
+
 
   if (!chats || chats.length <= 0) {
     NoContent();
   }
   return chats;
+}
+
+/**
+ * 
+ * @returns 
+ */
+export const GetAllChatsByUserId = async (userId: string) => {
+
+  //récupérer toutes les requêtes et demandes du type
+
+  const requests = await prisma.request.findMany({
+    where: {
+      userId,
+    },
+    select: {
+      id: true
+    }
+
+  })
+
+  const requestIds = requests.map(item => item.id);
+
+  const response = await prisma.response.findMany({
+    where: {
+      userId,
+    },
+    select: {
+      id: true
+    }
+  })
+
+  const responseIds = response.map(item => item.id);
+
+
+  // aller les chercher par ça
+
+  const chats = await prisma.chat.findMany({
+    where: {
+      OR: [
+        {
+          requestId: { in: requestIds }
+        },
+        {
+          responseId: { in: responseIds }
+        },
+      ]
+
+    },
+    include: {
+      messages: {
+        orderBy: {
+          createdAt: "desc",
+        },
+        take: 1,
+      },
+      request: {
+        select: { user: true },
+
+      }
+    }
+  });
+
+
+  if (!chats || chats.length <= 0) {
+    NoContent();
+  }
+
+  return { chats };
+  // return { chats, request: requests, response: response, };
 }
 
 /**
