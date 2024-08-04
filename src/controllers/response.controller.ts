@@ -31,7 +31,7 @@ export const PostResponse = async (req: Request, res: Response, next: NextFuncti
     const photos = req.files ? req.files : undefined;
     const responseCreated = await CreateResponse({ userId, requestId });
 
-    return res.status(200).json(responseCreated);
+    return res.status(201).json(responseCreated);
   } catch (e) {
     next(e)
   }

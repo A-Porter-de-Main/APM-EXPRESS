@@ -7,6 +7,7 @@ import responseRouter from "./routes/response.routes";
 import { errorHandler } from "../middlewares/errorMiddlewares";
 import skillRouter from "./routes/skill.routes";
 import chatRouter from "./routes/chat.routes";
+import messageRouter from "./routes/message.routes";
 
 const app = express()
 const port = process.env.PORT || 80;
@@ -29,6 +30,7 @@ app.use("/request", requestRouter)
 app.use("/response", responseRouter)
 app.use("/skill", skillRouter)
 app.use("/chat", chatRouter)
+app.use("/message", messageRouter)
 
 app.use(errorHandler)
 

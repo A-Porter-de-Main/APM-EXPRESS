@@ -42,7 +42,7 @@ export const PostRequest = async (req: Request, res: Response, next: NextFunctio
     // console.log("skills after: ", typeof stringToArraySkill)
     const requestCreated = await CreateRequest({ description, deadline, skills: skills, userId, photos: photos });
 
-    return res.status(200).json(requestCreated);
+    return res.status(201).json(requestCreated);
   } catch (e) {
     next(e)
   }

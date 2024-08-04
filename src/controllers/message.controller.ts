@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { GetAllSkills, GetOneSkilltById } from '../services/skill.services';
+import { CreateMessage } from '../services/message.services';
 
 
 //Get
@@ -18,6 +19,21 @@ export const GetOneById = async (req: Request, res: Response, next: NextFunction
     const { id } = req.params
     const message = await GetOneSkilltById(id);
     return res.status(200).json(message);
+  } catch (e) {
+    next(e)
+  }
+}
+
+
+//Create
+export const PostMessage = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { chatId, content, senderId, receiverId } = req.body;
+
+    const createdMesage = await CreateMessage({ chatId, content, senderId, receiverId })
+
+    res.status(201).json(createdMesage);
+
   } catch (e) {
     next(e)
   }

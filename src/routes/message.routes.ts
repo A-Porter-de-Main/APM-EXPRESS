@@ -1,11 +1,14 @@
 import { Router } from 'express';
 import { authHandler } from '../../middlewares/authMiddlewares';
-import { GetOneById, GetSkills } from '../controllers/skill.controller';
-import { GetChats } from '../controllers/chat.controller';
-const chatRouter = Router();
+import { PostMessage, GetOneById, GetMessages } from '../controllers/message.controller';
+import { createMessageSchema } from '../../validators/message.validator';
+import { validateDataAsync } from '../../middlewares/validatorMiddlewares';
 
-chatRouter.get('/', authHandler(["admin", "user"]), GetChats);
-chatRouter.get('/:id', authHandler(["admin", "user"]), GetOneById);
+const messageRouter = Router();
+
+messageRouter.get('/', authHandler(["admin", "user"]), GetMessages);
+messageRouter.get('/:id', authHandler(["admin", "user"]), GetOneById); //ajoute un validate param Url
+messageRouter.post('/', authHandler(["admin", "user"]), validateDataAsync(createMessageSchema), PostMessage);
 
 
-export default chatRouter;
+export default messageRouter;

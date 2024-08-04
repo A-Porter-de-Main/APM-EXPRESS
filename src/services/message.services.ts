@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { NoContent, notFoundError } from '../../utils/customErrors';
+import { MessageRegistrationDTO } from '../types/message';
 
 const prisma = new PrismaClient();
 
@@ -55,49 +56,26 @@ export const GetOneMessageById = async (messageId: string) => {
   return chat;
 }
 
+//Todo: fais le create Message et test
+export const CreateMessage = async (requestDto: MessageRegistrationDTO) => {
+  try {
+    const { chatId, content, senderId, receiverId } = requestDto;
 
-// export const CreateMessage = async (requestDto: RequestRegistrationDTO) => {
-//   try {
-//     const { description, deadline, skills, userId, photos } = requestDto;
+    const createdMsg = await prisma.message.create({
+      data: {
+        chatId,
+        senderId,
+        receiverId,
+        content,
+        createdAt: new Date().toISOString()
+      },
+    });
 
-//     let picturesData: any = [];
-//     //Vérifie si il existe un seul ou plusieurs photos ou pas de photos
-//     if (Array.isArray(photos)) {
-//       picturesData = photos.map(item => ({
-//         picturePath: item.path
-//       }));
-//     } else if (photos && typeof photos === 'object') {
-//       picturesData = [{ picturePath: photos.path }]
-//     }
+    //Si Ok alors push New notification Pusheer
 
+    return createdMsg;
 
-//     //Récupère status open
-//     const openStatus = await prisma.requestStatus.findUnique({ where: { code: "OPN" } })
-//     if (!openStatus) return badRequestError("Open status don't exist");
-
-//     return await prisma.request.create({
-//       data: {
-//         description,
-//         userId,
-//         deadline,
-//         statusId: openStatus.id,
-//         pictures: {
-//           create: picturesData
-//         },
-//         skills: {
-//           create: {
-//             skill: { connect: { id: skills } }
-//           }
-//         }
-
-//       },
-//       include: {
-//         skills: true,
-//         pictures: true,
-//         responses: true
-//       }
-//     });
-//   } catch (e) {
-//     throw e;
-//   }
-// }
+  } catch (e) {
+    throw e;
+  }
+}

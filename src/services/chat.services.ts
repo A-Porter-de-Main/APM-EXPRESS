@@ -9,7 +9,16 @@ const prisma = new PrismaClient();
  */
 export const GetAllChats = async () => {
 
-  const chats = await prisma.chat.findMany();
+  const chats = await prisma.chat.findMany({
+    include: {
+      messages: {
+        orderBy: {
+          createdAt: "desc",
+        },
+        take: 1,
+      }
+    }
+  });
   // const chats = await prisma.chat.groupBy({
   //   by: [""]
   // });
@@ -39,12 +48,12 @@ export const GetOneChatById = async (chatId: string) => {
     where: { id: chatId },
     include: {
       messages: {
-        take: 1,
         orderBy: {
-          createdAt: 'desc'
+          createdAt: "desc"
         }
       }
     }
+
   })
 
   if (!chat) {
