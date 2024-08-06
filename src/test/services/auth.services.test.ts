@@ -1,7 +1,9 @@
 import request from 'supertest';
 import {afterEach, beforeEach, describe, expect, it, jest} from '@jest/globals';
-import {PrismaClient, User} from '@prisma/client';
+import {PrismaClient} from '@prisma/client';
 import bcrypt from 'bcrypt';
+import {UserLoginDTO} from "../../types/user";
+import {AuthenticateUser} from "../../services/auth.services";
 
 require('dotenv').config();
 
@@ -23,9 +25,14 @@ const validUser = {
     picturePath: '/uploads/placeholder.jpg', // Ajoutez la propriété picturePath
 };
 
-const loginUser = {
+const loginUserFailed = {
     email: 'test@test.ru',
     password: 'password123',
+}
+
+const loginUserValid: UserLoginDTO = {
+    email: process.env.ADMIN_EMAIL as string,
+    password: process.env.ADMIN_PASSWORD as string,
 }
 
 beforeEach(async () => {
@@ -103,13 +110,13 @@ describe('POST /auth/login', () => {
         expect(response.status).toBe(400);
     });
 
-     it('should return a status 401 if bad credentials', async () => {
-         const response = await request(server).post('/auth/login').send({
-             email: 'wrongemail@example.com', // Assurez-vous que cet email n'existe pas dans la base de données
-             password: 'wrongpassword'
-         }).set({ Accept: 'application/json' });
-         expect(response.status).toBe(401);
-     });
+    it('should return a status 401 if bad credentials', async () => {
+        const response = await request(server).post('/auth/login').send({
+            email: 'wrongemail@example.com', // Assurez-vous que cet email n'existe pas dans la base de données
+            password: 'wrongpassword'
+        }).set({Accept: 'application/json'});
+        expect(response.status).toBe(401);
+    });
     it('should return a status 200 if user exists', async () => {
         const response = await request(server).post('/auth/login').send({
                 email: process.env.ADMIN_EMAIL, password: process.env.ADMIN_PASSWORD
@@ -128,20 +135,22 @@ describe('GET /auth/users', () => {
     });
 
     it('should return a status 200 if token is provided', async () => {
+        const user = await AuthenticateUser(loginUserValid);
+
         const response = await request(server).get('/auth/users')
             .set({
                 Accept: 'application/json',
-                Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRhOTEzOGI0LWE4Y2QtNDkxYi04MWEwLWVmMzQ0NTYxZGNhYyIsImVtYWlsIjoiYWRtaW5AYWRtaW4uY29tIiwiZmlyc3ROYW1lIjoiQWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjI5NTIzOTYsImV4cCI6MTcyMjk1NTk5Nn0.cVh4rvk__nODiZ8bqv9--mlrfRFif6d1m0d6Qzw89P0`
+                Authorization: `Bearer ${user.token}`
             });
         expect(response.status).toBe(200);
     });
 
-  /*  it('should return a status 204 if any user is found', async () => {
-        const response = await request(server).get('/auth/users')
-            .set({
-                Accept: 'application/json',
-                Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRhOTEzOGI0LWE4Y2QtNDkxYi04MWEwLWVmMzQ0NTYxZGNhYyIsImVtYWlsIjoiYWRtaW5AYWRtaW4uY29tIiwiZmlyc3ROYW1lIjoiQWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjI5NTIzOTYsImV4cCI6MTcyMjk1NTk5Nn0.cVh4rvk__nODiZ8bqv9--mlrfRFif6d1m0d6Qzw89P0`
-            });
-        expect(response.status).toBe(204);
-    });*/
+    /*  it('should return a status 204 if any user is found', async () => {
+          const response = await request(server).get('/auth/users')
+              .set({
+                  Accept: 'application/json',
+                  Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRhOTEzOGI0LWE4Y2QtNDkxYi04MWEwLWVmMzQ0NTYxZGNhYyIsImVtYWlsIjoiYWRtaW5AYWRtaW4uY29tIiwiZmlyc3ROYW1lIjoiQWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjI5NTIzOTYsImV4cCI6MTcyMjk1NTk5Nn0.cVh4rvk__nODiZ8bqv9--mlrfRFif6d1m0d6Qzw89P0`
+              });
+          expect(response.status).toBe 204;
+      });*/
 });

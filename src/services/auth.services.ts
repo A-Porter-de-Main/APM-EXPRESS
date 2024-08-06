@@ -40,7 +40,7 @@ export const AuthenticateUser = async (credentials: UserLoginDTO) => {
       }
     })
     if (!user || !(await bcrypt.compare(password, user.password))) {
-     return  badCredentialsError("Email or Password invalid");
+      badCredentialsError("Email or Password invalid");
     }
     const token = GenerateToken(user as UserTokenInfosDTO);
     return { token, user }
