@@ -64,13 +64,13 @@ model Address {
   zipCode   String
   street    String
   city      String?
-  user      User    @relation(fields: [userId], references: [id])
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Preference {
   id     String @id @default(uuid()) @db.Uuid
   userId String @unique @db.Uuid
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Response {
@@ -80,7 +80,7 @@ model Response {
 
   user    User    @relation(fields: [userId], references: [id])
   request Request @relation(fields: [requestId], references: [id])
-  chat Chat?
+  chat    Chat?
 }
 
 model Request {
@@ -97,7 +97,7 @@ model Request {
   user      User          @relation(fields: [userId], references: [id])
   status    RequestStatus @relation(fields: [statusId], references: [id])
   responses Response[]
-  chats Chat[]
+  chats     Chat[]
 }
 
 model RequestStatus {
@@ -116,9 +116,9 @@ model RequestPicture {
 }
 
 model SkillsOnRequests {
-  request   Request @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  request   Request @relation(fields: [requestId], references: [id])
   requestId String  @db.Uuid
-  skill     Skill   @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  skill     Skill   @relation(fields: [skillId], references: [id])
   skillId   String  @db.Uuid
 
   @@id([requestId, skillId])
@@ -158,29 +158,27 @@ model ObjectModel {
   user   User   @relation(fields: [userId], references: [id])
 }
 
-
 model Chat {
-    id     String @id @default(uuid()) @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
-    requestId String @db.Uuid
-    responseId String @db.Uuid @unique
+  requestId  String @db.Uuid
+  responseId String @unique @db.Uuid
 
- request  Request  @relation(fields: [requestId], references: [id])
-  response  Response  @relation(fields: [responseId], references: [id])    
-    messages Message[]
+  request  Request   @relation(fields: [requestId], references: [id])
+  response Response  @relation(fields: [responseId], references: [id])
+  messages Message[]
 }
 
 model Message {
-  id     String @id @default(uuid()) @db.Uuid
-  content       String
-  createdAt     DateTime    @default(now())
-  senderId      String      @db.Uuid // ID de l'utilisateur qui envoie le message
-  receiverId    String      @db.Uuid // ID de l'utilisateur qui reçoit le message
-  chatId String   @db.Uuid
-  
-  
-  chat  Chat  @relation(fields: [chatId], references: [id])
-  }
+  id         String   @id @default(uuid()) @db.Uuid
+  content    String
+  createdAt  DateTime @default(now())
+  senderId   String   @db.Uuid // ID de l'utilisateur qui envoie le message
+  receiverId String   @db.Uuid // ID de l'utilisateur qui reçoit le message
+  chatId     String   @db.Uuid
+
+  chat Chat @relation(fields: [chatId], references: [id])
+}
 
 // model Message {
 //   id            String      @id @default(auto()) @map("_id") @db.ObjectId
