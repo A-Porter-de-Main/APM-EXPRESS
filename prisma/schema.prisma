@@ -79,7 +79,7 @@ model Response {
   requestId String @db.Uuid
 
   user    User    @relation(fields: [userId], references: [id])
-  request Request @relation(fields: [requestId], references: [id])
+  request Request @relation(fields: [requestId], references: [id], onDelete: Cascade)
   chat    Chat?
 }
 
@@ -94,8 +94,8 @@ model Request {
   updatedAt   DateTime           @updatedAt
   statusId    String             @db.Uuid
 
-  user      User          @relation(fields: [userId], references: [id])
-  status    RequestStatus @relation(fields: [statusId], references: [id])
+  user      User          @relation(fields: [userId], references: [id], onDelete: NoAction)
+  status    RequestStatus @relation(fields: [statusId], references: [id], onDelete: Cascade)
   responses Response[]
   chats     Chat[]
 }
@@ -116,7 +116,7 @@ model RequestPicture {
 }
 
 model SkillsOnRequests {
-  request   Request @relation(fields: [requestId], references: [id])
+  request   Request @relation(fields: [requestId], references: [id], onDelete: Cascade)
   requestId String  @db.Uuid
   skill     Skill   @relation(fields: [skillId], references: [id])
   skillId   String  @db.Uuid
@@ -164,8 +164,8 @@ model Chat {
   requestId  String @db.Uuid
   responseId String @unique @db.Uuid
 
-  request  Request   @relation(fields: [requestId], references: [id])
-  response Response  @relation(fields: [responseId], references: [id])
+  request  Request   @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  response Response  @relation(fields: [responseId], references: [id], onDelete: Cascade)
   messages Message[]
 }
 

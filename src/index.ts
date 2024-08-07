@@ -55,9 +55,8 @@ app.use(errorHandler)
 // ...rest of code
 
 
+if (process.env.NODE_ENV !== 'test') {
+    app.listen(port, () => console.log(`Listening on port ${port}`));
+}
 
-const server = app.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}`)
-})
-
-module.exports = server;
+module.exports = app;

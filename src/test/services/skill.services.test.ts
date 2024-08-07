@@ -8,17 +8,16 @@ require('dotenv').config();
 
 const prisma = new PrismaClient();
 
-let server: any;
+const server = require('../../index');
 
 beforeEach(async () => {
-    server = require('../../index');
     jest.resetModules()
 });
 
 
 afterEach(async () => {
     await prisma.$disconnect(); // Fermez la connexion Prisma après chaque test
-    if (server && server.close) server.close();
+    if (server && server.close) await server.close();
 });
 
 
@@ -45,10 +44,11 @@ describe('GET /skill/:id', () => {
         expect(response.status).toBe(401);
     });
 
-    it('should return a status 200 if token is provided', async () => {
+    it('should return a status 200 if token is provided and skill exist', async () => {
         const user = await AuthenticateUser(loginUserValid);
-
-        const response = await request(server).get('/skill/0705305b-c70f-40b1-b5de-df8fa29bdbb5')
+        const skillName = "Préparation de repas";
+        const findSkill = await prisma.skill.findFirst({where: {name: skillName}});
+        const response = await request(server).get(`/skill/${findSkill?.id}`)
             .set({Accept: 'application/json', Authorization: `Bearer ${user.token}`});
         expect(response.status).toBe(200);
     });

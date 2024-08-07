@@ -8,7 +8,7 @@ import {AuthenticateUser} from "../../services/auth.services";
 require('dotenv').config();
 
 const prisma = new PrismaClient();
-let server: any;
+const server = require('../../index');
 
 const validUser = {
     firstName: 'John',
@@ -36,18 +36,18 @@ const loginUserValid: UserLoginDTO = {
 }
 
 beforeEach(async () => {
-    server = require('../../index');
+
     jest.resetModules()
     const user = await prisma.user.findFirst({where: {email: validUser.email}});
     if (user) {
         await prisma.user.delete({where: {email: validUser.email}}); // Nettoyer la base de données avant chaque test
     }
     await prisma.address.deleteMany(); // Nettoyer la table des adresses avant chaque test
+
 });
 
 afterEach(async () => {
     await prisma.$disconnect(); // Fermez la connexion Prisma après chaque test
-    if (server && server.close) server.close();
 });
 
 describe('POST /auth/register', () => {
@@ -71,7 +71,7 @@ describe('POST /auth/register', () => {
                 phone: validUser.phone,
                 password: hashedPassword,
                 picturePath: validUser.picturePath,
-                roleId: roleId?.id, // Assurez-vous que roleId est une valeur valide
+                roleId: roleId?.id,
                 createdAt: new Date(),
                 updatedAt: new Date(),
                 addresses: {

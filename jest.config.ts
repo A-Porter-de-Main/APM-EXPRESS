@@ -18,8 +18,6 @@ const config: Config = {
     // Automatically clear mock calls, instances, contexts and results before every test
     clearMocks: true,
     setupFiles: ['dotenv/config'],
-    setupFilesAfterEnv: ['<rootDir>/src/test/singleton.ts'], // Assurez-vous que le chemin est correct
-
     moduleNameMapper: {
         '^@/(.*)$': '<rootDir>/src/$1',
     },
