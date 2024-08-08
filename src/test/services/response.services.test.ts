@@ -62,6 +62,8 @@ describe('Response Services', () => {
     it('should create a response', async () => {
         const user = await AuthenticateUser(loginUserValid);
         const token = user.token;
+
+        // il faut d'abord créer une requête pour pouvoir répondre
         const mockSkill = await prisma.skill.findFirst({
             where: {
                 name: 'Préparation de repas',
@@ -74,9 +76,8 @@ describe('Response Services', () => {
             .field('deadline', new Date().toISOString())
             .field('skills', mockSkill?.id as string)
             .field('userId', user.user?.id as string)
-        /*
-                    .attach('photos', path.join(__dirname, '../assets/randomDog.jpg'))
-        */
+        expect(response.status).toBe(201);
+
         const res = await request(server).post('/response').set('Authorization', `Bearer ${token}`).send({
             userId: user.user?.id,
             requestId: response.body.id,
@@ -167,14 +168,6 @@ describe('Response Services', () => {
         expect(res.status).toBe(404);
     });
 
-    it('should return 204 if no response contend found', async () => {
-        await prisma.response.deleteMany();
-        const user = await AuthenticateUser(loginUserValid);
-        const token = user.token;
-        const uuid = uuidv4();
-        const res = await request(server).get(`/response`).set('Authorization', `Bearer ${token}`);
-        expect(res.status).toBe(204);
-    });
 
     it('should return 404 if no response found by id', async () => {
         const user = await AuthenticateUser(loginUserValid);

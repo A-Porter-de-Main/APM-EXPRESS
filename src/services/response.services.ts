@@ -24,10 +24,11 @@ export const GetAllResponse = async () => {
 
 /**
  * Récupère la réponse par son id
- * @param responsetId
  * @returns
+ * @param responseId
  */
-export const GetOneResponsetById = async (responseId: string) => {
+export const GetOneResponseById = async (responseId: string) => {
+   console.log("ici dans GetOneResponseById", responseId)
     try {
         const response = await prisma.response.findUnique({
             where: {id: responseId},

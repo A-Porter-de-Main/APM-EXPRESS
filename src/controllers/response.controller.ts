@@ -2,8 +2,7 @@ import {Request, Response, NextFunction} from 'express';
 import {
     CreateResponse,
     DeleteResponse,
-    GetAllResponse,
-    GetOneResponsetById,
+    GetAllResponse, GetOneResponseById,
     UpdateResponse
 } from "../services/response.services";
 
@@ -22,7 +21,7 @@ export const GetResponses = async (req: Request, res: Response, next: NextFuncti
 export const GetOneById = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const {id} = req.params
-        const response = await GetOneResponsetById(id);
+        const response = await GetOneResponseById(id);
         return res.status(200).json(response);
     } catch (e) {
         next(e)

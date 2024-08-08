@@ -1,22 +1,23 @@
-import { PrismaClient } from '@prisma/client';
-import { NoContent, notFoundError } from '../../utils/customErrors';
-import { MessageRegistrationDTO } from '../types/message';
-import { PusherChat } from '../../utils/pusher';
+import {PrismaClient} from '@prisma/client';
+import {NoContent, notFoundError} from '../../utils/customErrors';
+import {MessageRegistrationDTO} from '../types/message';
+import {PusherChat} from '../../utils/pusher';
 
 const prisma = new PrismaClient();
 
 /**
  * Récup tous les messages
- * @returns 
+ * @returns
  */
 export const GetAllMessages = async () => {
 
-  const messages = await prisma.message.findMany();
+    const messages = await prisma.message.findMany();
 
-  if (!messages || messages.length <= 0) {
-    NoContent();
-  }
-  return messages;
+    console.log(messages);
+    if (!messages || messages.length === 0) {
+        NoContent();
+    }
+    return messages;
 }
 
 // //J'essaye de retourner tous les chat avec le 1er message a travers les messages
@@ -34,50 +35,50 @@ export const GetAllMessages = async () => {
 
 /**
  * Récupère le chat par son id
- * @param chatId 
- * @returns 
+ * @param chatId
+ * @returns
  */
 export const GetOneMessageById = async (messageId: string) => {
 
-  const chat = await prisma.chat.findUnique({
-    where: { id: messageId },
-    include: {
-      messages: {
-        take: 1,
-        orderBy: {
-          createdAt: 'desc'
+    const chat = await prisma.chat.findUnique({
+        where: {id: messageId},
+        include: {
+            messages: {
+                take: 1,
+                orderBy: {
+                    createdAt: 'desc'
+                }
+            }
         }
-      }
-    }
-  })
+    })
 
-  if (!chat) {
-    notFoundError("Chat not found");
-  }
-  return chat;
+    if (!chat) {
+        notFoundError("Chat not found");
+    }
+    return chat;
 }
 
 //Todo: fais le create Message et test
 export const CreateMessage = async (requestDto: MessageRegistrationDTO) => {
-  try {
-    const { chatId, content, senderId, receiverId } = requestDto;
+    try {
+        const {chatId, content, senderId, receiverId} = requestDto;
 
-    const createdMsg = await prisma.message.create({
-      data: {
-        chatId,
-        senderId,
-        receiverId,
-        content,
-        createdAt: new Date().toISOString()
-      },
-    });
+        const createdMsg = await prisma.message.create({
+            data: {
+                chatId,
+                senderId,
+                receiverId,
+                content,
+                createdAt: new Date().toISOString()
+            },
+        });
 
-    //Si Ok alors push New notification Pusheer
-    PusherChat(chatId, content, senderId, receiverId, createdMsg.createdAt)
+        //Si Ok alors push New notification Pusheer
+        PusherChat(chatId, content, senderId, receiverId, createdMsg.createdAt)
 
-    return createdMsg;
+        return createdMsg;
 
-  } catch (e) {
-    throw e;
-  }
+    } catch (e) {
+        throw e;
+    }
 }
