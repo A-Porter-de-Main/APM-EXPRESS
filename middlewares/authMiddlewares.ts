@@ -16,7 +16,7 @@ export function authHandler(roles: string[]): (req: Request, res: Response, next
 
         let token: any = decode(authBearer)
 
-    console.log("token: ", token)
+          // console.log("token: ", token)
 
         if (!token) return res.status(401).end();
 

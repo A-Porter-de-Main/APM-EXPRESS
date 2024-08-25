@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import { NoContent, notFoundError } from '../../utils/customErrors';
 import { MessageRegistrationDTO } from '../types/message';
 import { PusherChat } from '../../utils/pusher';
+import { io } from '..';
 
 const prisma = new PrismaClient();
 
@@ -73,7 +74,8 @@ export const CreateMessage = async (requestDto: MessageRegistrationDTO) => {
     });
 
     //Si Ok alors push New notification Pusheer
-    PusherChat(chatId, content, senderId, receiverId, createdMsg.createdAt)
+    // PusherChat(chatId, content, senderId, receiverId, createdMsg.createdAt, createdMsg.id)
+    io.to(`chat_${chatId}`).emit('newMessage', { chatId: chatId, senderId: senderId, receiverId: receiverId, content: content, createdAt: createdMsg.createdAt, id: createdMsg.id });
 
     return createdMsg;
 

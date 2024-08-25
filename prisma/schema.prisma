@@ -39,6 +39,9 @@ model User {
   objects              ObjectModel[]
   skills               SkillsOnUsers[]
   responses            Response[]
+
+  requestedChats Chat[] @relation("RequesterToChat")
+  respondedChats Chat[] @relation("ResponderToChat")
 }
 
 model SkillsOnUsers {
@@ -164,10 +167,14 @@ model Chat {
 
     requestId String @db.Uuid
     responseId String @db.Uuid @unique
+    requesterId String   @db.Uuid // ID de l'utilisateur qui a créé la demande
+  responderId String   @db.Uuid // ID de l'utilisateur qui a répondu à la demande
 
  request  Request  @relation(fields: [requestId], references: [id])
   response  Response  @relation(fields: [responseId], references: [id])    
-    messages Message[]
+  messages Message[]
+  requester User @relation("RequesterToChat", fields: [requesterId], references: [id])
+  responder User @relation("ResponderToChat", fields: [responderId], references: [id])
 }
 
 model Message {

@@ -70,7 +70,7 @@ const SeedAdmin = async () => {
         },
         },
         phone: "0000000000",
-        picturePath: "/uploads/placeholder.jpg",
+        picturePath: "uploads/placeholder.jpg",
         
       }
     })
