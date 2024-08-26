@@ -11,7 +11,6 @@ const uploadsDir = "uploads";
 exports.fileStorage = multer_1.default.diskStorage({
     destination: (req, file, callback) => {
         callback(null, uploadsDir);
-        // callback(null, path);
     },
     filename: (req, file, callback) => {
         const uuid = (0, uuid_1.v4)();

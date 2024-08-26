@@ -10,6 +10,7 @@ exports.userRegistrationSchema = zod_1.z.object({
     longitude: zod_1.z.string().min(1),
     zipCode: zod_1.z.string().min(1),
     street: zod_1.z.string().min(1),
+    city: zod_1.z.string().min(1),
     email: zod_1.z.string().email().min(1),
     password: zod_1.z.string().min(8),
     phone: zod_1.z.string().regex(phoneNumberRegex, "invalid phone number"),
