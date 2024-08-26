@@ -35,6 +35,22 @@ app.use("/skill", skill_routes_1.default);
 app.use("/chat", chat_routes_1.default);
 app.use("/message", message_routes_1.default);
 app.use(errorMiddlewares_1.errorHandler);
+// ...app.use statements
+// app.post("/pusher/auth", (req, res) => {
+//     const socketId = req.body.socket_id;
+//     const channel = req.body.channel_name;
+//     const username = "admin";
+//     const authResponse = pusher.authorizeChannel(socketId, channel);
+//     res.json({
+//         ...authResponse,
+//         //   channel_data: JSON.stringify(user),
+//     });
+// });
+// ...rest of code
+if (process.env.NODE_ENV !== 'test') {
+    app.listen(port, () => console.log(`Listening on port ${port}`));
+}
+module.exports = app;
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
 });

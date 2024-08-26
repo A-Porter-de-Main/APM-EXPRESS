@@ -18,6 +18,7 @@ export const Login = async (req: Request, res: Response, next: NextFunction) => 
         const loggedUser = await AuthenticateUser({email, password});
         return res.json(loggedUser);
     } catch (e) {
+
         // You can also throw the error if you want to handle it somewhere else
         next(e)
     }

@@ -1,11 +1,11 @@
-import { PrismaClient } from '@prisma/client';
-import { NoContent, notFoundError } from '../../utils/customErrors';
+import {PrismaClient} from '@prisma/client';
+import {NoContent, notFoundError} from '../../utils/customErrors';
 
 const prisma = new PrismaClient();
 
 /**
  * Récup tous les chats
- * @returns 
+ * @returns
  */
 export const GetAllChats = async () => {
 
@@ -22,15 +22,15 @@ export const GetAllChats = async () => {
   });
 
 
-  if (!chats || chats.length <= 0) {
-    NoContent();
-  }
-  return chats;
+    if (!chats || chats.length === 0) {
+        NoContent();
+    }
+    return chats;
 }
 
 /**
- * 
- * @returns 
+ *
+ * @returns
  */
 export const GetAllChatsByUserId = async (userId: string) => {
 
@@ -61,9 +61,9 @@ export const GetAllChatsByUserId = async (userId: string) => {
     }
   });
 
-  if (!chats || chats.length <= 0) {
-    NoContent();
-  }
+    if (!chats || chats.length === 0) {
+        NoContent();
+    }
 
 
 
@@ -92,8 +92,8 @@ export const GetAllChatsByUserId = async (userId: string) => {
 
 /**
  * Récupère le chat par son id
- * @param chatId 
- * @returns 
+ * @param chatId
+ * @returns
  */
 export const GetOneChatById = async (chatId: string) => {
 
@@ -107,11 +107,13 @@ export const GetOneChatById = async (chatId: string) => {
       }
     }
 
-  })
+    })
 
-  if (!chat) {
-    notFoundError("Chat not found");
-  }
-  return chat;
+    if (!chat) {
+        notFoundError("Chat not found");
+    }
+    return chat;
 }
+
+
 

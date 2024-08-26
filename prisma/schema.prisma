@@ -82,7 +82,7 @@ model Response {
   requestId String @db.Uuid
 
   user    User    @relation(fields: [userId], references: [id])
-  request Request @relation(fields: [requestId], references: [id])
+  request Request @relation(fields: [requestId], references: [id], onDelete: Cascade)
   chat    Chat?
 }
 
@@ -97,8 +97,8 @@ model Request {
   updatedAt   DateTime           @updatedAt
   statusId    String             @db.Uuid
 
-  user      User          @relation(fields: [userId], references: [id])
-  status    RequestStatus @relation(fields: [statusId], references: [id])
+  user      User          @relation(fields: [userId], references: [id], onDelete: NoAction)
+  status    RequestStatus @relation(fields: [statusId], references: [id], onDelete: Cascade)
   responses Response[]
   chats     Chat[]
 }
@@ -119,7 +119,7 @@ model RequestPicture {
 }
 
 model SkillsOnRequests {
-  request   Request @relation(fields: [requestId], references: [id])
+  request   Request @relation(fields: [requestId], references: [id], onDelete: Cascade)
   requestId String  @db.Uuid
   skill     Skill   @relation(fields: [skillId], references: [id])
   skillId   String  @db.Uuid
@@ -164,16 +164,16 @@ model ObjectModel {
 model Chat {
   id String @id @default(uuid()) @db.Uuid
 
-    requestId String @db.Uuid
-    responseId String @db.Uuid @unique
-    requesterId String   @db.Uuid // ID de l'utilisateur qui a créé la demande
-  responderId String   @db.Uuid // ID de l'utilisateur qui a répondu à la demande
+  requestId   String @db.Uuid
+  responseId  String @db.Uuid @unique
+  requesterId String @db.Uuid // ID de l'utilisateur qui a créé la demande
+  responderId String @db.Uuid // ID de l'utilisateur qui a répondu à la demande
 
- request  Request  @relation(fields: [requestId], references: [id])
-  response  Response  @relation(fields: [responseId], references: [id])    
-  messages Message[]
-  requester User @relation("RequesterToChat", fields: [requesterId], references: [id])
-  responder User @relation("ResponderToChat", fields: [responderId], references: [id])
+  request   Request   @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  response  Response  @relation(fields: [responseId], references: [id], onDelete: Cascade)
+  messages  Message[]
+  requester User      @relation("RequesterToChat", fields: [requesterId], references: [id])
+  responder User      @relation("ResponderToChat", fields: [responderId], references: [id])
 }
 
 model Message {

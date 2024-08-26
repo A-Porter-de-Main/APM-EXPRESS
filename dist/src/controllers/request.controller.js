@@ -65,7 +65,18 @@ const PatchRequest = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
         console.log("les fichiers: ", photos);
         console.log("les skills: ", skills);
         const stringToArraySkill = skills ? JSON.parse(skills) : undefined;
+<<<<<<< HEAD
         const requestUpdated = yield (0, request_services_1.UpdateRequest)(id, { description, deadline, skills: stringToArraySkill, userId, photos: photos });
+=======
+        // skills if is array parse it else return skills
+        const requestUpdated = yield (0, request_services_1.UpdateRequest)(id, {
+            description,
+            deadline,
+            skills: skills,
+            userId,
+            photos: photos
+        });
+>>>>>>> 542da90802c804bacc8e5b0afdfaaaab09b4a02d
         return res.status(200).json(requestUpdated);
     }
     catch (e) {
@@ -79,7 +90,11 @@ const DeleteById = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
         const { id } = req.params;
         console.log("ici 2");
         const deletedRequest = yield (0, request_services_1.DeleteRequest)(id);
+<<<<<<< HEAD
         return res.status(204).json("");
+=======
+        return res.status(200).json({ message: "Request deleted successfully" });
+>>>>>>> 542da90802c804bacc8e5b0afdfaaaab09b4a02d
     }
     catch (e) {
         next(e);

@@ -1,51 +1,51 @@
-import { PrismaClient, User } from '@prisma/client';
-import { badRequestError, NoContent, notFoundError } from '../../utils/customErrors';
-import { ResponseRegistrationDTO } from '../types/response';
-import { CheckExistingFieldForZod } from '../../utils/checkFields';
+import {PrismaClient} from '@prisma/client';
+import {badRequestError, NoContent, notFoundError} from '../../utils/customErrors';
+import {ResponseRegistrationDTO} from '../types/response';
 
 const prisma = new PrismaClient();
 
 /**
  * Récup toute les réponses
- * @returns 
+ * @returns
  */
 export const GetAllResponse = async () => {
-  try {
-    const response = await prisma.response.findMany();
+    try {
+        const response = await prisma.response.findMany();
 
-    if (!response || response.length <= 0) {
-      NoContent();
+        if (!response || response.length === 0) {
+            NoContent();
+        }
+
+        return response;
+    } catch (e) {
+        throw e;
     }
-
-    return response;
-  } catch (e) {
-    throw e;
-  }
 }
 
 /**
  * Récupère la réponse par son id
- * @param responsetId 
- * @returns 
+ * @returns
+ * @param responseId
  */
-export const GetOneResponsetById = async (responseId: string) => {
-  try {
-    const response = await prisma.response.findUnique({
-      where: { id: responseId },
-      include: {
-        user: true,
-        request: true,
-        chat: true
-      }
-    })
+export const GetOneResponseById = async (responseId: string) => {
+   console.log("ici dans GetOneResponseById", responseId)
+    try {
+        const response = await prisma.response.findUnique({
+            where: {id: responseId},
+            include: {
+                user: true,
+                request: true,
+                chat: true
+            }
+        })
 
-    if (!response) {
-      notFoundError("Request not found");
+        if (!response) {
+            notFoundError("Request not found");
+        }
+        return response;
+    } catch (e) {
+        throw e;
     }
-    return response;
-  } catch (e) {
-    throw e;
-  }
 }
 
 
@@ -57,7 +57,7 @@ export const CreateResponse = async (requestDto: ResponseRegistrationDTO) => {
     //PUIS, vérifier si il existe déjà un chat entre les deux users si oui, ne rien faire sinon en créer un 
 
     const request = await prisma.request.findUnique({ where: { id: requestId } })
-    if (!request || request === null) return notFoundError("Request Not Found")
+    if (!request) return notFoundError("Request Not Found")
 
     const existingChat = await prisma.chat.findFirst({
       where: {
@@ -67,10 +67,10 @@ export const CreateResponse = async (requestDto: ResponseRegistrationDTO) => {
       }
     })
 
-    const exsitingResponse = await prisma.response.findFirst({ where: { userId: userId, requestId: requestId } })
-    // if(!existingChat) 
+        const exsitingResponse = await prisma.response.findFirst({where: {userId: userId, requestId: requestId}})
+        // if(!existingChat)
 
-    if(exsitingResponse ) badRequestError("User have already response to this request")
+        if (exsitingResponse) badRequestError("User have already response to this request")
 
     if (!existingChat) {
       options = {
@@ -99,48 +99,45 @@ export const CreateResponse = async (requestDto: ResponseRegistrationDTO) => {
       }
     })
 
-    return responseCreated;
-  } catch (e) {
-    throw e;
-  }
+        return responseCreated;
+    } catch (e) {
+        throw e;
+    }
 }
 
 export const UpdateResponse = async (responseId: string, requestDto: Partial<ResponseRegistrationDTO>) => {
-  try {
+    try {
 
-    const responseUpdated = await prisma.response.update({
-      where: { id: responseId },
-      data: requestDto,
-      include: {
-        user: true,
-        request: true,
-      }
-    });
+        const responseUpdated = await prisma.response.update({
+            where: {id: responseId},
+            data: requestDto,
+            include: {
+                user: true,
+                request: true,
+            }
+        });
 
-    return responseUpdated;
-  } catch (e) {
-    throw e;
-  }
+        return responseUpdated;
+    } catch (e) {
+        throw e;
+    }
 };
 
 
 /**
  * Supprime la response avec son id
- * @param requestId 
- * @returns 
+ * @returns
+ * @param responseId
  */
 export const DeleteResponse = async (responseId: string) => {
-  try {
+    try {
 
-    const response = await prisma.response.delete({
-      where: {
-        id: responseId
-      }
-    })
-
-
-    return response;
-  } catch (e) {
-    throw e;
-  }
+        return await prisma.response.delete({
+            where: {
+                id: responseId
+            }
+        });
+    } catch (e) {
+        throw e;
+    }
 }

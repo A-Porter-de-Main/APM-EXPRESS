@@ -44,5 +44,5 @@ const GetChatByUserId = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
     catch (e) {
         next(e);
     }
-});
+}); //Get chats by userId
 exports.GetChatByUserId = GetChatByUserId;

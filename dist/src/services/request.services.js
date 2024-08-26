@@ -54,7 +54,7 @@ const GetOneRequestById = (requestId) => __awaiter(void 0, void 0, void 0, funct
             }
         });
         if (!request) {
-            (0, customErrors_1.notFoundError)("Request not found");
+            return (0, customErrors_1.notFoundError)("Request not found");
         }
         return request;
     }

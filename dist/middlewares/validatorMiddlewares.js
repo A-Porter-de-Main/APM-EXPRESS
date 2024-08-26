@@ -42,6 +42,7 @@ function validateData(schema) {
 function validateDataAsync(schema) {
     return (req, res, next) => __awaiter(this, void 0, void 0, function* () {
         try {
+            console.log(req.body, "req.body validateDataAsync");
             yield schema.parseAsync(req.body);
             next();
         }

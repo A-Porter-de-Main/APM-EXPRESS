@@ -30,6 +30,7 @@ export function validateData(schema: z.ZodObject<any, any>) {
 export function validateDataAsync(schema: z.ZodObject<any, any>) {
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
+            console.log(req.body, "req.body validateDataAsync");
             await schema.parseAsync(req.body);
             next();
         } catch (error) {
