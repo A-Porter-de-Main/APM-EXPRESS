@@ -73,8 +73,6 @@ export const CreateMessage = async (requestDto: MessageRegistrationDTO) => {
       },
     });
 
-    //Si Ok alors push New notification Pusheer
-    // PusherChat(chatId, content, senderId, receiverId, createdMsg.createdAt, createdMsg.id)
     io.to(`chat_${chatId}`).emit('newMessage', { chatId: chatId, senderId: senderId, receiverId: receiverId, content: content, createdAt: createdMsg.createdAt, id: createdMsg.id });
 
     return createdMsg;
