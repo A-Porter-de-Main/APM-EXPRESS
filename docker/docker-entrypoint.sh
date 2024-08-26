@@ -10,7 +10,8 @@ echo "Lancement entrypoint"
 echo "Installation"
 npm ci
 
-
+echo "Build"
+npm run build
 
 echo "Prisma generate"
 npx prisma generate
