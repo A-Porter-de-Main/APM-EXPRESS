@@ -14,7 +14,7 @@ import { createServer } from 'http';
 import { Server as SocketIOServer } from 'socket.io';
 
 const app = express()
-const port = process.env.PORT || 80;
+const port = process.env.PORT_BACKEND || 80;
 const allowedOrigins = ['http://localhost:3000','http://localhost:3001', ];
 
 const options: cors.CorsOptions = {
