@@ -10,9 +10,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DeleteById = exports.PatchRequest = exports.PostRequest = exports.GetOneById = exports.GetRequests = void 0;
-const client_1 = require("@prisma/client");
 const request_services_1 = require("../services/request.services");
-const prisma = new client_1.PrismaClient();
+//Todo => ajouter les nouveaux champ dans les crud et update
+//Status => créer un seeding "ouvert", "fermer","en cours" et par defaut mettre le status sur ouvert
+//  => faire la création d'une response sur la requête, donc quand je mdoifie une requete je veux pouvoir virer les responses
 //Get
 const GetRequests = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -39,9 +40,16 @@ exports.GetOneById = GetOneById;
 //Post
 const PostRequest = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { description, deadline, skills, userId } = req.body;
-        const request = yield (0, request_services_1.GetOneRequestById)(userId);
-        return res.status(200).json(request);
+        const { description, deadline, skills, userId, } = req.body;
+        const photos = req.files ? req.files : undefined;
+        console.log("les fichiers: ", photos);
+        //Le formdata transforme mon tableau en string
+        //Ducoup je le retransforme en tableau
+        // const stringToArraySkill = JSON.parse(skills);
+        // console.log("skills before: ", typeof skills)
+        // console.log("skills after: ", typeof stringToArraySkill)
+        const requestCreated = yield (0, request_services_1.CreateRequest)({ description, deadline, skills: skills, userId, photos: photos });
+        return res.status(201).json(requestCreated);
     }
     catch (e) {
         next(e);
@@ -51,6 +59,21 @@ exports.PostRequest = PostRequest;
 //Update
 const PatchRequest = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const { description, deadline, skills, userId, } = req.body;
+        const photos = req.files ? req.files : undefined;
+        const { id } = req.params;
+        console.log("les fichiers: ", photos);
+        console.log("les skills: ", skills);
+        const stringToArraySkill = skills ? JSON.parse(skills) : undefined;
+        // skills if is array parse it else return skills
+        const requestUpdated = yield (0, request_services_1.UpdateRequest)(id, {
+            description,
+            deadline,
+            skills: skills,
+            userId,
+            photos: photos
+        });
+        return res.status(200).json(requestUpdated);
     }
     catch (e) {
         next(e);
@@ -58,12 +81,11 @@ const PatchRequest = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
 });
 exports.PatchRequest = PatchRequest;
 //Delete
-//Todo vérifier que Les skills et le user associé ne soit pas delete en cascade avec
 const DeleteById = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
         const deletedRequest = yield (0, request_services_1.DeleteRequest)(id);
-        return res.status(204);
+        return res.status(200).json({ message: "Request deleted successfully" });
     }
     catch (e) {
         next(e);

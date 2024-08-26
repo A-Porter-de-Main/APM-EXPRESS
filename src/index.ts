@@ -10,6 +10,9 @@ import chatRouter from "./routes/chat.routes";
 import messageRouter from "./routes/message.routes";
 import { pusher } from "../utils/pusher";
 
+import { createServer } from 'http';
+import { Server as SocketIOServer } from 'socket.io';
+
 const app = express()
 const port = process.env.PORT || 80;
 const allowedOrigins = ['http://localhost:3000','http://localhost:3001', ];
@@ -60,3 +63,39 @@ if (process.env.NODE_ENV !== 'test') {
 }
 
 module.exports = app;
+app.listen(port, () => {
+    console.log(`Server running on http://localhost:${port}`)
+})
+
+
+//Mon serveur socket
+const app2 = express();
+const httpServer = createServer(app2);
+export const io = new SocketIOServer(httpServer, {
+    cors: {
+        origin: allowedOrigins,
+        credentials: true
+    }
+});
+
+io.on('connection', (socket) => {
+    console.log('A user connected');
+
+    socket.on('joinRoom', (chatId) => {
+        socket.join(`${chatId}`);
+        console.log(`User joined ${chatId}`);
+    });
+
+    socket.on('sendMessage', (data) => {
+        io.to(`chat_${data.chatId}`).emit('newMessage', data);
+    });
+
+    socket.on('disconnect', () => {
+        console.log('User disconnected');
+    });
+});
+
+const socketPort = 84;
+httpServer.listen(socketPort, () => {
+    console.log(`Server running on http://localhost:${socketPort}`);
+});

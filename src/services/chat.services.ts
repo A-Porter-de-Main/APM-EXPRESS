@@ -9,22 +9,18 @@ const prisma = new PrismaClient();
  */
 export const GetAllChats = async () => {
 
-    const chats = await prisma.chat.findMany({
-        include: {
-            messages: {
-                orderBy: {
-                    createdAt: "desc",
-                },
-                take: 1,
-            },
-            request: {
-                select: {user: true},
+  const chats = await prisma.chat.findMany({
+    include: {
+      messages: {
+        orderBy: {
+          createdAt: "desc",
+        },
+        take: 1,
+      },
+      request: true
+    }
+  });
 
-            }
-        }
-    });
-
-    console.log(chats);
 
     if (!chats || chats.length === 0) {
         NoContent();
@@ -38,66 +34,60 @@ export const GetAllChats = async () => {
  */
 export const GetAllChatsByUserId = async (userId: string) => {
 
-    //récupérer toutes les requêtes et demandes du type
 
-    const requests = await prisma.request.findMany({
-        where: {
-            userId,
-        },
-        select: {
-            id: true
-        }
-
-    })
-
-    const requestIds = requests.map(item => item.id);
-
-    const response = await prisma.response.findMany({
-        where: {
-            userId,
-        },
-        select: {
-            id: true
-        }
-    })
-
-    const responseIds = response.map(item => item.id);
-
-
-    // aller les chercher par ça
-
-    const chats = await prisma.chat.findMany({
-        where: {
-            OR: [
-                {
-                    requestId: {in: requestIds}
-                },
-                {
-                    responseId: {in: responseIds}
-                },
-            ]
-
-        },
+  const chats = await prisma.chat.findMany({
+    where: {
+      OR: [
+        { requesterId: userId },
+        { responderId: userId }
+      ]
+    },
+    include: {
+      request: {
         include: {
-            messages: {
-                orderBy: {
-                    createdAt: "desc",
-                },
-                take: 1,
-            },
-            request: {
-                select: {user: true},
-            }
+          user: true  // Inclure les détails de l'utilisateur qui a créé la demande
         }
-    });
-
+      },
+      response: {
+        include: {
+          user: true  // Inclure les détails de l'utilisateur qui a répondu à la demande
+        }
+      },
+      messages: {
+        orderBy: {
+          createdAt: 'desc'
+        }
+      }
+    }
+  });
 
     if (!chats || chats.length === 0) {
         NoContent();
     }
 
-    return {chats};
-    // return { chats, request: requests, response: response, };
+
+
+  // Enrichir les chats avec les informations de l'interlocuteur
+  const enrichedChats = chats.map(chat => {
+    // Déterminer si l'utilisateur actuel est le demandeur ou le répondant
+    const isRequester = chat.requesterId === userId;
+    const interlocutor = isRequester ? chat.response.user : chat.request.user;
+    const interlocutorId = isRequester ? chat.responderId : chat.requesterId;
+
+    return {
+      ...chat,
+      interlocutorId,   // ID de l'interlocuteur
+      interlocutor     // Informations complètes de l'interlocuteur
+    };
+  });
+
+  return enrichedChats;
+
+
+
+
+  // return { chats };
+  // return { chats, request: requests, response: response, };
 }
 
 /**
@@ -107,15 +97,15 @@ export const GetAllChatsByUserId = async (userId: string) => {
  */
 export const GetOneChatById = async (chatId: string) => {
 
-    const chat = await prisma.chat.findUnique({
-        where: {id: chatId},
-        include: {
-            messages: {
-                orderBy: {
-                    createdAt: "desc"
-                }
-            }
+  const chat = await prisma.chat.findUnique({
+    where: { id: chatId },
+    include: {
+      messages: {
+        orderBy: {
+          createdAt: "asc"
         }
+      }
+    }
 
     })
 

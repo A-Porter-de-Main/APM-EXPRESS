@@ -16,20 +16,26 @@ const prisma = new client_1.PrismaClient();
 function authHandler(roles) {
     return (req, res, next) => __awaiter(this, void 0, void 0, function* () {
         var _a;
-        //Récup la requete avec le bearer
-        let authBearer = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split("Bearer ")[1];
-        console.log("C'est toi le auth bearer ? : ", authBearer);
-        if (!authBearer)
-            return res.status(401).end();
-        let token = (0, jsonwebtoken_1.decode)(authBearer);
-        if (!token)
-            return res.status(401).end();
-        const existngUser = yield prisma.user.findUnique({ where: { id: token.id } });
-        if (roles.includes(token.role) && existngUser) {
-            next();
+        try {
+            //Récup la requete avec le bearer
+            let authBearer = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split("Bearer ")[1];
+            if (!authBearer)
+                return res.status(401).end();
+            let token = (0, jsonwebtoken_1.decode)(authBearer);
+            // console.log("token: ", token)
+            if (!token)
+                return res.status(401).end();
+            // const existngUser = await prisma.user.findUnique({where: {email: token.email}})
+            const existngUser = yield prisma.user.findUnique({ where: { email: token.email } });
+            if (roles.includes(token.role) && existngUser) {
+                next();
+            }
+            else {
+                return res.status(401).end();
+            }
         }
-        else {
-            return res.status(401).end();
+        catch (e) {
+            next(e);
         }
     });
 }

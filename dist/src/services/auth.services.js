@@ -12,13 +12,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateUser = exports.AuthenticateUser = exports.GenerateToken = void 0;
+exports.GetAllUsers = exports.CreateUser = exports.AuthenticateUser = exports.GenerateToken = void 0;
 const client_1 = require("@prisma/client");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const customErrors_1 = require("../../utils/customErrors");
 const checkFields_1 = require("../../utils/checkFields");
 const findRole_1 = require("../../utils/findRole");
+const customErrors_1 = require("../../utils/customErrors");
 const prisma = new client_1.PrismaClient();
 /**
  * Fonction de génération de Token JWT
@@ -111,3 +111,17 @@ const CreateUser = (userData) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.CreateUser = CreateUser;
+//GetAllUser dev route
+const GetAllUsers = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const user = yield prisma.user.findMany();
+        if (!user) {
+            (0, customErrors_1.NoContent)();
+        }
+        return user;
+    }
+    catch (e) {
+        throw e;
+    }
+});
+exports.GetAllUsers = GetAllUsers;
