@@ -1,8 +1,31 @@
 FROM node:21.5.0-alpine AS build
+ARG PORT
+ARG JWT_SECRET
+ARG JWT_EXPIRES_IN
+ARG ADMIN_EMAIL
+ARG ADMIN_PASSWORD
+ARG DATABASE_URL
+
+ENV PORT=$PORT
+ENV JWT_SECRET=$JWT_SECRET
+ENV JWT_EXPIRES_IN=$JWT_EXPIRES_IN
+ENV ADMIN_EMAIL=$ADMIN_EMAIL
+ENV ADMIN_PASSWORD=$ADMIN_PASSWORD
+ENV DATABASE_URL=$DATABASE_URL
+
+RUN echo "DATABASE_URL=$DATABASE_URL"
+
 
 COPY . /app/
 
 WORKDIR /app
+
+RUN npm install
+RUN npm run build
+
+RUN npx prisma generate
+
+RUN npx prisma migrate deploy
 
 EXPOSE 80
 
@@ -11,5 +34,3 @@ RUN chmod +x /usr/local/bin/docker-entrypoint
 
 ENTRYPOINT ["docker-entrypoint"]
 CMD ["npm", "run", "start"]
-
-

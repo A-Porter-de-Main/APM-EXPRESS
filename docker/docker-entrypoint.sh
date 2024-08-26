@@ -7,12 +7,12 @@ echo "Lancement entrypoint"
 #     npm install
 # fi
 
-echo "Installation"
-npm ci
+# echo "Installation"
+# npm ci
 
 
-echo "Build"
-npm install
+# echo "Build"
+# npm install
 
 echo "Prisma generate"
 npx prisma generate
