@@ -38,6 +38,10 @@ app.use("/message", messageRouter)
 
 app.use(errorHandler)
 
+app.get("/", (req, res) => {
+    res.send("Bienvenue sur l'api express apm")
+})
+
 if (process.env.NODE_ENV != "test") {
     app.listen(port, () => {
         console.log(`Server running on http://localhost:${port}`)
