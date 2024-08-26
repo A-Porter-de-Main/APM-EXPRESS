@@ -20,14 +20,8 @@ COPY . /app/
 
 WORKDIR /app
 
-# RUN npm install
-# RUN npm run build
 
-# RUN npx prisma generate
-
-
-
-EXPOSE 80
+EXPOSE 80 84
 
 COPY docker/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 RUN chmod +x /usr/local/bin/docker-entrypoint
