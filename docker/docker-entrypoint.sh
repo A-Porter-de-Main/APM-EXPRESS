@@ -14,11 +14,12 @@ echo "Lancement entrypoint"
 # echo "Build"
 # npm install
 
-echo "Prisma generate"
-npx prisma generate
+# echo "Prisma generate"
+# npx prisma generate
 
 echo "Prisma migrate"
 npx prisma migrate deploy
+
 
 echo "Run"
 exec "$@" 
