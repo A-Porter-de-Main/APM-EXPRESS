@@ -15,7 +15,7 @@ import { Server as SocketIOServer } from 'socket.io';
 
 const app = express()
 const port = process.env.PORT_BACKEND || 80;
-const allowedOrigins = ['http://localhost:3000','http://localhost:3001', ];
+const allowedOrigins = ['http://localhost:3000', 'http://localhost:3001', "https://jordanboutrois.fr"];
 
 const options: cors.CorsOptions = {
     origin: allowedOrigins,
