@@ -52,9 +52,12 @@ export const GetOneResponsetById = async (responseId: string) => {
 export const CreateResponse = async (requestDto: ResponseRegistrationDTO) => {
   try {
     const { userId, requestId } = requestDto;
-    let otpions;
+    let options;
     //ICI, vérifier que la demande ne dispose pas déjà d'une response avec le meme user id
     //PUIS, vérifier si il existe déjà un chat entre les deux users si oui, ne rien faire sinon en créer un 
+
+    const request = await prisma.request.findUnique({ where: { id: requestId } })
+    if (!request || request === null) return notFoundError("Request Not Found")
 
     const existingChat = await prisma.chat.findFirst({
       where: {
@@ -69,24 +72,25 @@ export const CreateResponse = async (requestDto: ResponseRegistrationDTO) => {
 
     if(exsitingResponse ) badRequestError("User have already response to this request")
 
-    // if(existingChat) {
-    //   options = {chat: {
-    //     create: {
-          
-    //     }
-    //   } }
-    // }
+    if (!existingChat) {
+      options = {
+        chat: {
+          create: {
+            requestId: requestId,
+            requesterId: request.userId,
+            responderId: userId
+
+          }
+        }
+      }
+    }
 
 
     const responseCreated = await prisma.response.create({
       data: {
         userId,
         requestId,
-        chat: {
-          create: {
-            requestId: requestId,
-          }
-        }
+        ...options
       },
       include: {
         user: true,
