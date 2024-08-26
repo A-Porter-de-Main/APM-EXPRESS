@@ -112,8 +112,8 @@ describe('POST /auth/login', () => {
 
     it('should return a status 401 if bad credentials', async () => {
         const response = await request(server).post('/auth/login').send({
-            email: 'wrongemail@example.com', // Assurez-vous que cet email n'existe pas dans la base de données
-            password: 'wrongpassword'
+            email: loginUserFailed.email, // Assurez-vous que cet email n'existe pas dans la base de données
+            password: loginUserFailed.password,
         }).set({Accept: 'application/json'});
         expect(response.status).toBe(401);
     });
