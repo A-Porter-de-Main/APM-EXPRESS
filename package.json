@@ -8,7 +8,7 @@
     "dev": "nodemon src/index.ts",
     "migrate": "prisma migrate dev",
     "studio": "npx prisma studio",
-    "test": "NODE_ENV=test jest --coverage --forceExit",
+    "test": "NODE_ENV=test jest --coverage --detectOpenHandles --forceExit",
     "test:watch": "NODE_ENV=test jest --watch --coverage --forceExit"
   },
   "prisma": {

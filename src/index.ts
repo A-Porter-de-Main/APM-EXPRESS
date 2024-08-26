@@ -4,18 +4,18 @@ import cors from "cors";
 import authRouter from "./routes/auth.routes";
 import requestRouter from "./routes/request.routes";
 import responseRouter from "./routes/response.routes";
-import { errorHandler } from "../middlewares/errorMiddlewares";
+import {errorHandler} from "../middlewares/errorMiddlewares";
 import skillRouter from "./routes/skill.routes";
 import chatRouter from "./routes/chat.routes";
 import messageRouter from "./routes/message.routes";
-import { pusher } from "../utils/pusher";
+import {pusher} from "../utils/pusher";
 
-import { createServer } from 'http';
-import { Server as SocketIOServer } from 'socket.io';
+import {createServer} from 'http';
+import {Server as SocketIOServer} from 'socket.io';
 
 const app = express()
 const port = process.env.PORT || 80;
-const allowedOrigins = ['http://localhost:3000','http://localhost:3001', ];
+const allowedOrigins = ['http://localhost:3000', 'http://localhost:3001',];
 
 const options: cors.CorsOptions = {
     origin: allowedOrigins,
@@ -54,7 +54,6 @@ app.use(errorHandler)
 // });
 
 
-
 // ...rest of code
 
 
@@ -63,9 +62,6 @@ if (process.env.NODE_ENV !== 'test') {
 }
 
 module.exports = app;
-app.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}`)
-})
 
 
 //Mon serveur socket
@@ -96,6 +92,8 @@ io.on('connection', (socket) => {
 });
 
 const socketPort = 84;
-httpServer.listen(socketPort, () => {
-    console.log(`Server running on http://localhost:${socketPort}`);
-});
+if (process.env.NODE_ENV !== 'test') {
+    httpServer.listen(socketPort, () => {
+        console.log(`Server running on http://localhost:${socketPort}`);
+    });
+}

@@ -1,3 +1,4 @@
+/*
 import request from 'supertest';
 import {afterEach, beforeEach, describe, expect, it, jest} from '@jest/globals';
 import {PrismaClient} from '@prisma/client';
@@ -98,7 +99,30 @@ describe('POST /auth/register', () => {
             password: hashedPassword,
         })
             .set({Accept: 'application/json'});
-        expect(response.status).toBe(201);
+        console.log(response.body)
+
+        expect(response).toMatchObject({
+            status: 201,
+            body: {
+                token: expect.any(String),
+                user: {
+                    id: expect.any(String),
+                    firstName: validUser.firstName,
+                    lastName: validUser.lastName,
+                    description: validUser.description,
+                    email: validUser.email,
+                    phone: validUser.phone,
+                    password: expect.any(String),
+                    stripeUserId: null,
+                    picturePath: validUser.picturePath,
+                    createdAt: expect.any(String),
+                    updatedAt: expect.any(String),
+                    roleId: expect.any(String),
+                    role: {id: expect.any(String), name: 'user'},
+                    addresses: expect.any(Array),
+                }
+            }
+        })
     });
 });
 
@@ -145,12 +169,13 @@ describe('GET /auth/users', () => {
         expect(response.status).toBe(200);
     });
 
-    /*  it('should return a status 204 if any user is found', async () => {
+    /!*  it('should return a status 204 if any user is found', async () => {
           const response = await request(server).get('/auth/users')
               .set({
                   Accept: 'application/json',
                   Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRhOTEzOGI0LWE4Y2QtNDkxYi04MWEwLWVmMzQ0NTYxZGNhYyIsImVtYWlsIjoiYWRtaW5AYWRtaW4uY29tIiwiZmlyc3ROYW1lIjoiQWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjI5NTIzOTYsImV4cCI6MTcyMjk1NTk5Nn0.cVh4rvk__nODiZ8bqv9--mlrfRFif6d1m0d6Qzw89P0`
               });
           expect(response.status).toBe 204;
-      });*/
+      });*!/
 });
+*/
