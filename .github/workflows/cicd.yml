@@ -30,7 +30,7 @@ jobs:
         run: echo "TAG=$(if [[ ${{ github.ref }} == 'refs/heads/develop' ]]; then echo 'develop'; else echo 'latest'; fi)" >> $GITHUB_ENV
 
       - name: Build Docker image
-        run: docker build --tag ghcr.io/${{ env.IMAGE_NAME }}:${{ env.TAG }} --platform linux/amd64 ./apm
+        run: docker build --tag ghcr.io/${{ env.IMAGE_NAME }}:${{ env.TAG }} --platform linux/amd64 .
 
       - name: Push Docker image to GHCR
         run: docker push ghcr.io/${{ env.IMAGE_NAME }}:${{ env.TAG }}
