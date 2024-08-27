@@ -1,4 +1,3 @@
-/*
 import request from "supertest";
 import {afterEach, beforeEach, describe, expect, it, jest} from '@jest/globals';
 import {PrismaClient} from '@prisma/client';
@@ -24,6 +23,91 @@ afterEach(async () => {
 
 describe('Response Services', () => {
 
+    it('should return status 400 on delete response if no response found', async () => {
+        const user = await AuthenticateUser(loginUserValid);
+        const token = user.token;
+        const uuid = uuidv4();
+        const res = await request(server).delete(`/response/${uuid}`).set('Authorization', `Bearer ${token}`);
+        expect(res).toMatchObject({
+            status: 400,
+            body: {
+                error: expect.any(String),
+                details: expect.arrayContaining([expect.objectContaining({
+                    message: expect.any(String),
+                })])
+            },
+        });
+
+    });
+
+    it('should return status 400 on patch response if  response does not exist', async () => {
+        const user = await AuthenticateUser(loginUserValid);
+        const token = user.token;
+        const uuid = uuidv4();
+        const res = await request(server).patch(`/response/${uuid}`).set('Authorization', `Bearer ${token}`);
+        expect(res).toMatchObject({
+            status: 400,
+            body: {
+                error: expect.any(String),
+                details: expect.arrayContaining([expect.objectContaining({
+                    message: expect.any(String),
+                })])
+            },
+        });
+    });
+
+    it('should return status 400 when you create a response with invalid userId', async () => {
+        const user = await AuthenticateUser(loginUserValid);
+        const token = user.token;
+
+        // il faut d'abord créer une requête pour pouvoir répondre
+        const mockSkill = await prisma.skill.findFirst({
+            where: {
+                name: 'Préparation de repas',
+            },
+        });
+        // création de la request
+        // field est utilisé pour le multipart/form-data et attach pour les fichiers joints
+        const response = await request(server).post('/request').set('Authorization', `Bearer ${token}`)
+            .field('description', 'Test description')
+            .field('deadline', new Date().toISOString())
+            .field('skills', mockSkill?.id as string)
+            .field('userId', user.user?.id as string)
+        /*.attach('photos', path.join(__dirname, '../assets/randomDog.jpg'))*/
+
+
+        const res = await request(server).post('/response').set('Authorization', `Bearer ${token}`).send({
+            userId: uuidv4(),
+            requestId: response.body.id,
+        });
+        expect(res).toMatchObject({
+            status: 400,
+            body: {
+                error: expect.any(String),
+                details: expect.arrayContaining([expect.objectContaining({
+                    message: expect.any(String),
+                })])
+            },
+        });
+    });
+    it('should return status 400 when you create a response with invalid requestId', async () => {
+        const user = await AuthenticateUser(loginUserValid);
+        const token = user.token;
+
+        const res = await request(server).post('/response').set('Authorization', `Bearer ${token}`).send({
+            userId: user.user?.id,
+            requestId: uuidv4(),
+        });
+        expect(res).toMatchObject({
+            status: 400,
+            body: {
+                error: expect.any(String),
+                details: expect.arrayContaining([expect.objectContaining({
+                    message: expect.any(String),
+                })])
+            },
+        });
+    });
 
     it('should return status 404 if no response found by id', async () => {
         const user = await AuthenticateUser(loginUserValid);
@@ -73,10 +157,10 @@ describe('Response Services', () => {
             .field('deadline', new Date().toISOString())
             .field('skills', mockSkill?.id as string)
             .field('userId', user.user?.id as string)
-        /!*.attach('photos', path.join(__dirname, '../assets/randomDog.jpg'))*!/
+        /*.attach('photos', path.join(__dirname, '../assets/randomDog.jpg'))*/
 
         // Déjà testé dans request.services.test.ts
-        /!* expect(response).toMatchObject({
+        /* expect(response).toMatchObject({
              status: 201,
              body: expect.objectContaining({
                  id: expect.any(String),
@@ -93,7 +177,7 @@ describe('Response Services', () => {
                  pictures: expect.any(Array),
                  responses: expect.any(Array),
              })
-         })*!/
+         })*/
         const res = await request(server).post('/response').set('Authorization', `Bearer ${token}`).send({
             userId: user.user?.id,
             requestId: response.body.id,
@@ -224,7 +308,6 @@ describe('Response Services', () => {
             requestId: findResponse?.requestId,
         });
         expect(res.status).toBe(200);
-        console.log(res.body);
         expect(res.body).toHaveProperty('userId', user.user?.id);
         expect(res.body).toHaveProperty('requestId', res.body.requestId);
         expect(res.body).toHaveProperty('id', res.body.id);
@@ -269,21 +352,6 @@ describe('Response Services', () => {
 
         expect(res.status).toBe(204);
     });
-    it('should return status 400 on delete response if no response found', async () => {
-        const user = await AuthenticateUser(loginUserValid);
-        const token = user.token;
-        const uuid = uuidv4();
-        const res = await request(server).delete(`/response/${uuid}`).set('Authorization', `Bearer ${token}`);
-        expect(res).toMatchObject({
-            status: 400,
-            body: {
-                error: expect.any(String),
-                details: expect.arrayContaining([expect.objectContaining({
-                    message: expect.any(String),
-                })])
-            },
-        });
 
-    });
+
 });
-*/

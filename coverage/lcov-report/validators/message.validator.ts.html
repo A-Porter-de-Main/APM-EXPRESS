@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">35.13% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>13/37</span>
+                <span class='fraction'>37/37</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>9/9</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">35.13% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>13/37</span>
+                <span class='fraction'>37/37</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -107,35 +107,35 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -145,35 +145,35 @@ import { CheckExistingFieldForZod } from '../utils/checkFields';
 &nbsp;
 export const createMessageSchema = z.object({
   chatId: z.string().min(1).superRefine(async (val, ctx) =&gt; {
-<span class="cstat-no" title="statement not covered" >    const existingChat = await CheckExistingFieldForZod("id", val, "chat")</span>
-<span class="cstat-no" title="statement not covered" >    if (!existingChat) {</span>
-<span class="cstat-no" title="statement not covered" >      ctx.addIssue({</span>
-<span class="cstat-no" title="statement not covered" >        code: "custom",</span>
-<span class="cstat-no" title="statement not covered" >        message: "Chat does not exist",</span>
-<span class="cstat-no" title="statement not covered" >        path: ["chatId"]</span>
-<span class="cstat-no" title="statement not covered" >      })</span>
-<span class="cstat-no" title="statement not covered" >    }</span>
+    const existingChat = await CheckExistingFieldForZod("id", val, "chat")
+    if (!existingChat) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Chat does not exist",
+        path: ["chatId"]
+      })
+    }
   }),
   content: z.string().min(1),
   senderId: z.string().min(1).superRefine(async (val, ctx) =&gt; {
-<span class="cstat-no" title="statement not covered" >    const existingUser = await CheckExistingFieldForZod("id", val, "user")</span>
-<span class="cstat-no" title="statement not covered" >    if (!existingUser) {</span>
-<span class="cstat-no" title="statement not covered" >      ctx.addIssue({</span>
-<span class="cstat-no" title="statement not covered" >        code: "custom",</span>
-<span class="cstat-no" title="statement not covered" >        message: "User does not exist",</span>
-<span class="cstat-no" title="statement not covered" >        path: ["senderId"]</span>
-<span class="cstat-no" title="statement not covered" >      })</span>
-<span class="cstat-no" title="statement not covered" >    }</span>
+    const existingUser = await CheckExistingFieldForZod("id", val, "user")
+    if (!existingUser) {
+      ctx.addIssue({
+        code: "custom",
+        message: "User does not exist",
+        path: ["senderId"]
+      })
+    }
   }),
   receiverId: z.string().min(1).superRefine(async (val, ctx) =&gt; {
-<span class="cstat-no" title="statement not covered" >    const existingUser = await CheckExistingFieldForZod("id", val, "user")</span>
-<span class="cstat-no" title="statement not covered" >    if (!existingUser) {</span>
-<span class="cstat-no" title="statement not covered" >      ctx.addIssue({</span>
-<span class="cstat-no" title="statement not covered" >        code: "custom",</span>
-<span class="cstat-no" title="statement not covered" >        message: "User does not exist",</span>
-<span class="cstat-no" title="statement not covered" >        path: ["receiverID"]</span>
-<span class="cstat-no" title="statement not covered" >      })</span>
-<span class="cstat-no" title="statement not covered" >    }</span>
+    const existingUser = await CheckExistingFieldForZod("id", val, "user")
+    if (!existingUser) {
+      ctx.addIssue({
+        code: "custom",
+        message: "User does not exist",
+        path: ["receiverID"]
+      })
+    }
   }),
 });
 &nbsp;
@@ -184,7 +184,7 @@ export const createMessageSchema = z.object({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-26T12:48:04.116Z
+                at 2024-08-27T13:03:26.748Z
             </div>
         <script src="../prettify.js"></script>
         <script>

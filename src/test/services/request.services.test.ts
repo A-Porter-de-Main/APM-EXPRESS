@@ -1,4 +1,3 @@
-/*
 import request from "supertest";
 import {afterEach, beforeEach, describe, expect, it, jest} from '@jest/globals';
 import {PrismaClient} from '@prisma/client';
@@ -44,6 +43,59 @@ describe('Request Services', () => {
         const res = await request(server).get('/request').set('Authorization', `Bearer ${token}`);
         expect(res.status).toBe(204);
     });
+    it('should return a status 400 if skill does not exist on a create request', async () => {
+        const user = await AuthenticateUser(loginUserValid);
+        const token = user.token;
+
+        // field est utilisé pour le multipart/form-data et attach pour les fichiers joints
+        const res = await request(server).post('/request').set('Authorization', `Bearer ${token}`)
+            .field('description', 'Test description')
+            .field('deadline', new Date().toISOString())
+            .field('skills', uuidv4())
+            .field('userId', user.user?.id as string)
+        /*  .attach('photos', path.join(__dirname, '../assets/randomDog.jpg'))*/
+        expect(res).toMatchObject({
+            status: 400,
+            body: {
+                error: 'Invalid data',
+                details: expect.arrayContaining([
+                    expect.objectContaining({
+                        message: expect.any(String),
+                    }),
+                ]),
+            },
+        })
+    });
+
+    it('should return a status 400 if user does not exist on a create request', async () => {
+        const user = await AuthenticateUser(loginUserValid);
+        const token = user.token;
+        const mockSkill = await prisma.skill.findFirst({
+            where: {
+                name: 'Préparation de repas',
+            },
+        });
+        // field est utilisé pour le multipart/form-data et attach pour les fichiers joints
+        const res = await request(server).post('/request').set('Authorization', `Bearer ${token}`)
+            .field('description', 'Test description')
+            .field('deadline', new Date().toISOString())
+            .field('skills', mockSkill?.id as string)
+            .field('userId', uuidv4())
+        console.log(res.body)
+        /*  .attach('photos', path.join(__dirname, '../assets/randomDog.jpg'))*/
+        expect(res).toMatchObject({
+            status: 400,
+            body: {
+                error: 'Invalid data',
+                details: expect.arrayContaining([
+                    expect.objectContaining({
+                        message: expect.any(String),
+                    }),
+                ]),
+            },
+        })
+    });
+
     it('should return 404 if no request found by id', async () => {
         const user = await AuthenticateUser(loginUserValid);
         const token = user.token;
@@ -102,7 +154,7 @@ describe('Request Services', () => {
             .field('skills', mockSkill?.id as string)
             .field('userId', user.user?.id as string)
 
-        /!*  .attach('photos', path.join(__dirname, '../assets/randomDog.jpg'))*!/
+        /*  .attach('photos', path.join(__dirname, '../assets/randomDog.jpg'))*/
         expect(res).toMatchObject({
             status: 400,
             body: {
@@ -130,7 +182,7 @@ describe('Request Services', () => {
             .field('deadline', new Date().toISOString())
             .field('skills', mockSkill?.id as string)
             .field('userId', user.user?.id as string)
-        /!*.attach('photos', path.join(__dirname, '../assets/randomDog.jpg'))*!/
+        /*.attach('photos', path.join(__dirname, '../assets/randomDog.jpg'))*/
         expect(res).toMatchObject({
             status: 201,
             body: expect.objectContaining({
@@ -151,7 +203,7 @@ describe('Request Services', () => {
         })
     });
 
-    /!*  it('should create a request with images', async () => {
+    /*  it('should create a request with images', async () => {
           const mockSkill = await prisma.skill.findFirst({
               where: {
                   name: 'Préparation de repas',
@@ -177,7 +229,7 @@ describe('Request Services', () => {
           expect(res.status).toBe(201);
           expect(res.body).toHaveProperty('id');
           expect(res.body).toHaveProperty('description', 'Test description');
-      });*!/
+      });*/
 
     it('should get all requests', async () => {
         const user = await AuthenticateUser(loginUserValid);
@@ -281,6 +333,24 @@ describe('Request Services', () => {
         )
     });
 
+    it('should not update a request and return status 400 if no request does not exist', async () => {
+        const user = await AuthenticateUser(loginUserValid);
+        const token = user.token;
+
+        const res = await request(server).patch(`/request/${uuidv4()}`).set('Authorization', `Bearer ${token}`)
+        expect(res).toMatchObject({
+            status: 400,
+            body: {
+                error: 'Invalid data',
+                details: expect.arrayContaining([
+                    expect.objectContaining({
+                        message: expect.any(String),
+                    }),
+                ]),
+            },
+        })
+    });
+
     //  400 dans la requete delete car middleware de validation
     it('should  return status 400 bad request if any request found', async () => {
         const user = await AuthenticateUser(loginUserValid);
@@ -315,4 +385,3 @@ describe('Request Services', () => {
 
 
 });
-*/

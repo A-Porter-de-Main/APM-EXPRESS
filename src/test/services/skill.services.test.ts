@@ -1,4 +1,3 @@
-/*
 import request from "supertest";
 import {afterEach, beforeEach, describe, expect, it, jest} from '@jest/globals';
 import {PrismaClient} from '@prisma/client';
@@ -31,7 +30,7 @@ describe('GET /skill', () => {
         expect(response.status).toBe(401);
     });
 
-    /!*
+    /*
         Pourrais être utile si la table skill est vide mais actuellement pas nécessaire
         it('should return a status 204 if no content', async () => {
             const user = await AuthenticateUser(loginUserValid);
@@ -41,7 +40,7 @@ describe('GET /skill', () => {
             console.log(response.body);
             expect(response.status).toBe(204);
         });
-    *!/
+    */
 
     it('should return a status 200 if token is provided', async () => {
         const user = await AuthenticateUser(loginUserValid);
@@ -103,4 +102,3 @@ describe('GET /skill', () => {
         })
     });
 });
-*/

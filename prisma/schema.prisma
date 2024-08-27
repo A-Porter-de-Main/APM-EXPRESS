@@ -165,7 +165,7 @@ model Chat {
   id String @id @default(uuid()) @db.Uuid
 
   requestId   String @db.Uuid
-  responseId  String @db.Uuid @unique
+  responseId  String @unique @db.Uuid
   requesterId String @db.Uuid // ID de l'utilisateur qui a créé la demande
   responderId String @db.Uuid // ID de l'utilisateur qui a répondu à la demande
 
@@ -184,14 +184,5 @@ model Message {
   receiverId String   @db.Uuid // ID de l'utilisateur qui reçoit le message
   chatId     String   @db.Uuid
 
-  chat Chat @relation(fields: [chatId], references: [id])
+  chat Chat @relation(fields: [chatId], references: [id], onDelete: Cascade)
 }
-
-// model Message {
-//   id            String      @id @default(auto()) @map("_id") @db.ObjectId
-//   content       String
-//   createdAt     DateTime    @default(now())
-//   senderId      String      @db.ObjectId // ID de l'utilisateur qui envoie le message
-//   receiverId    String      @db.ObjectId // ID de l'utilisateur qui reçoit le message
-//   chatId String 
-// }

@@ -1,4 +1,3 @@
-/*
 import request from 'supertest';
 import {afterEach, beforeEach, describe, expect, it, jest} from '@jest/globals';
 import {PrismaClient} from '@prisma/client';
@@ -168,14 +167,26 @@ describe('GET /auth/users', () => {
             });
         expect(response.status).toBe(200);
     });
+    it('should return a status 401 if token provided is invalid', async () => {
+        const user = await AuthenticateUser(loginUserValid);
 
-    /!*  it('should return a status 204 if any user is found', async () => {
+        const response = await request(server).get('/auth/users')
+            .set({
+                Accept: 'application/json',
+                Authorization: `Bearer randomToken`
+            });
+        console.log(response.body)
+        expect(response.status).toBe(401);
+    });
+
+
+    /* describe('Cette fonction n'est utilisé que pour des tests pratiques pas dans l'application', () => {
+     it('should return a status 204 if any user is found', async () => {
           const response = await request(server).get('/auth/users')
               .set({
                   Accept: 'application/json',
                   Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRhOTEzOGI0LWE4Y2QtNDkxYi04MWEwLWVmMzQ0NTYxZGNhYyIsImVtYWlsIjoiYWRtaW5AYWRtaW4uY29tIiwiZmlyc3ROYW1lIjoiQWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjI5NTIzOTYsImV4cCI6MTcyMjk1NTk5Nn0.cVh4rvk__nODiZ8bqv9--mlrfRFif6d1m0d6Qzw89P0`
               });
           expect(response.status).toBe 204;
-      });*!/
+      });*/
 });
-*/
