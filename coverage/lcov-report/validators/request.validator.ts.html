@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">82.08% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>55/67</span>
+                <span class='fraction'>67/67</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">76.92% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>10/13</span>
+                <span class='fraction'>13/13</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">82.08% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>55/67</span>
+                <span class='fraction'>67/67</span>
             </div>
         
             
@@ -141,12 +141,12 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">4x</span>
@@ -156,12 +156,12 @@
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -208,28 +208,28 @@ export const createRequestSchema = z.object({
   deadline: z.string().min(1),
   userId: z.string().min(1).superRefine(async (val, ctx) =&gt; {
     const existingUser = await CheckExistingFieldForZod("id", val, "user")
-    if (!existingUser) <span class="branch-0 cbranch-no" title="branch not covered" >{</span>
-<span class="cstat-no" title="statement not covered" >      ctx.addIssue({</span>
-<span class="cstat-no" title="statement not covered" >        code: "custom",</span>
-<span class="cstat-no" title="statement not covered" >        message: "User does not exist",</span>
-<span class="cstat-no" title="statement not covered" >        path: ["userId"]</span>
-<span class="cstat-no" title="statement not covered" >      })</span>
-<span class="cstat-no" title="statement not covered" >    }</span>
+    if (!existingUser) {
+      ctx.addIssue({
+        code: "custom",
+        message: "User does not exist",
+        path: ["userId"]
+      })
+    }
   }),
   skills: z.string().min(1).superRefine(async (val, ctx) =&gt; {
     const undefinedSkillsIdArray: string[] = []
 &nbsp;
 &nbsp;
     const existingSkills = await CheckExistingFieldForZod("id", val, "skill")
-    if (!existingSkills) <span class="branch-0 cbranch-no" title="branch not covered" >undefinedSkillsIdArray.push(val)</span>
+    if (!existingSkills) undefinedSkillsIdArray.push(val)
 &nbsp;
-    if (undefinedSkillsIdArray.length &gt; 0) <span class="branch-0 cbranch-no" title="branch not covered" >{</span>
-<span class="cstat-no" title="statement not covered" >      ctx.addIssue({</span>
-<span class="cstat-no" title="statement not covered" >        code: "custom",</span>
-<span class="cstat-no" title="statement not covered" >        message: "doesn't exist",</span>
-<span class="cstat-no" title="statement not covered" >        path: ["skill"]</span>
-<span class="cstat-no" title="statement not covered" >      })</span>
-<span class="cstat-no" title="statement not covered" >    }</span>
+    if (undefinedSkillsIdArray.length &gt; 0) {
+      ctx.addIssue({
+        code: "custom",
+        message: "doesn't exist",
+        path: ["skill"]
+      })
+    }
 &nbsp;
   })
 });
@@ -274,7 +274,7 @@ export const patchRequestSchema = z.object({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-27T13:03:26.748Z
+                at 2024-08-27T14:14:45.888Z
             </div>
         <script src="../prettify.js"></script>
         <script>

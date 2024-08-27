@@ -10,6 +10,7 @@ require('dotenv').config();
 const prisma = new PrismaClient();
 const server = require('../../index');
 
+
 const validUser = {
     firstName: 'John',
     lastName: 'Doe',
