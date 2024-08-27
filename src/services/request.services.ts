@@ -140,14 +140,14 @@ export const UpdateRequest = async (requestId: string, requestDto: Partial<Reque
             };
         }
 
-        /* if (skills && skills.length > 0) {
-             dataToUpdate.skills = {
-                 deleteMany: {},
-                 create: skills.map(skillId => ({
-                     skill: {connect: {id: skillId}}
-                 }))
-             };
-         }*/
+        if (skills && skills.length > 0) {
+            dataToUpdate.skills = {
+                deleteMany: {},
+                create: skills.map(skillId => ({
+                    skill: {connect: {id: skillId}}
+                }))
+            };
+        }
 
         return await prisma.request.update({
             where: {id: requestId},
