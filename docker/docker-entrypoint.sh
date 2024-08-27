@@ -19,6 +19,9 @@ npx prisma generate
 echo "Prisma migrate"
 npx prisma migrate deploy
 
+echo "Prisma seed"
+npx prisma db seed
+
 
 echo "Run"
 exec "$@" 
