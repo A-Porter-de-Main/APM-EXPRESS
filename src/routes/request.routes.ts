@@ -1,9 +1,9 @@
-import { Router } from 'express';
-import { authHandler } from '../../middlewares/authMiddlewares';
+import {Router} from 'express';
+import {authHandler} from '../../middlewares/authMiddlewares';
 import upload from '../../config/multer';
-import { validateDataAsync, validateParamsAsync } from '../../middlewares/validatorMiddlewares';
-import { GetRequests, GetOneById, PostRequest, PatchRequest, DeleteById } from "../controllers/request.controller"
-import { createRequestSchema, deleteRequestSchema, patchRequestSchema } from "../../validators/request.validator"
+import {validateDataAsync, validateParamsAsync} from '../../middlewares/validatorMiddlewares';
+import {GetRequests, GetOneById, PostRequest, PatchRequest, DeleteById} from "../controllers/request.controller"
+import {createRequestSchema, deleteRequestSchema, patchRequestSchema} from "../../validators/request.validator"
 
 const requestRouter = Router();
 

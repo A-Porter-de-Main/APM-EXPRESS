@@ -1,6 +1,6 @@
-import { PrismaClient } from '@prisma/client';
-import { NoContent, notFoundError } from '../../utils/customErrors';
-import { MessageRegistrationDTO } from '../types/message';
+import {PrismaClient} from '@prisma/client';
+import {NoContent, notFoundError} from '../../utils/customErrors';
+import {MessageRegistrationDTO} from '../types/message';
 import {io} from "../index";
 
 const prisma = new PrismaClient();
@@ -38,10 +38,10 @@ export const GetAllMessages = async () => {
  * @param chatId
  * @returns
  */
-export const GetOneMessageById = async (messageId: string) => {
+export const GetOneMessageById = async (chatId: string) => {
 
     const chat = await prisma.chat.findUnique({
-        where: {id: messageId},
+        where: {id: chatId},
         include: {
             messages: {
                 take: 1,
@@ -74,7 +74,14 @@ export const CreateMessage = async (requestDto: MessageRegistrationDTO) => {
         });
 
         //Si Ok alors push New notification Pusheer
-    io.to(`chat_${chatId}`).emit('newMessage', { chatId: chatId, senderId: senderId, receiverId: receiverId, content: content, createdAt: createdMsg.createdAt, id: createdMsg.id });
+        io.to(`chat_${chatId}`).emit('newMessage', {
+            chatId: chatId,
+            senderId: senderId,
+            receiverId: receiverId,
+            content: content,
+            createdAt: createdMsg.createdAt,
+            id: createdMsg.id
+        });
 
         return createdMsg;
 

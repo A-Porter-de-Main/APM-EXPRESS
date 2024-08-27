@@ -57,20 +57,21 @@ export const PostRequest = async (req: Request, res: Response, next: NextFunctio
 export const PatchRequest = async (req: Request, res: Response, next: NextFunction) => {
     try {
 
-        const {description, deadline, skills, userId,} = req.body;
+        const {description, deadline, skills, userId, statusId} = req.body;
         const photos = req.files ? req.files : undefined;
         const {id} = req.params;
 
         console.log("les fichiers: ", photos)
         console.log("les skills: ", skills)
 
-        const stringToArraySkill = skills ? JSON.parse(skills) : undefined;
+        const stringToArraySkill = skills ? JSON.parse(skills) : skills;
         // skills if is array parse it else return skills
         const requestUpdated = await UpdateRequest(id, {
             description,
             deadline,
-            skills: skills,
+            skills: stringToArraySkill,
             userId,
+            statusId,
             photos: photos
         });
 

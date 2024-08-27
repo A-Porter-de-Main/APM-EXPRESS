@@ -10,6 +10,7 @@ require('dotenv').config();
 const prisma = new PrismaClient();
 const server = require('../../index');
 
+
 const validUser = {
     firstName: 'John',
     lastName: 'Doe',
@@ -98,7 +99,30 @@ describe('POST /auth/register', () => {
             password: hashedPassword,
         })
             .set({Accept: 'application/json'});
-        expect(response.status).toBe(201);
+        console.log(response.body)
+
+        expect(response).toMatchObject({
+            status: 201,
+            body: {
+                token: expect.any(String),
+                user: {
+                    id: expect.any(String),
+                    firstName: validUser.firstName,
+                    lastName: validUser.lastName,
+                    description: validUser.description,
+                    email: validUser.email,
+                    phone: validUser.phone,
+                    password: expect.any(String),
+                    stripeUserId: null,
+                    picturePath: validUser.picturePath,
+                    createdAt: expect.any(String),
+                    updatedAt: expect.any(String),
+                    roleId: expect.any(String),
+                    role: {id: expect.any(String), name: 'user'},
+                    addresses: expect.any(Array),
+                }
+            }
+        })
     });
 });
 
@@ -144,8 +168,21 @@ describe('GET /auth/users', () => {
             });
         expect(response.status).toBe(200);
     });
+    it('should return a status 401 if token provided is invalid', async () => {
+        const user = await AuthenticateUser(loginUserValid);
 
-    /*  it('should return a status 204 if any user is found', async () => {
+        const response = await request(server).get('/auth/users')
+            .set({
+                Accept: 'application/json',
+                Authorization: `Bearer randomToken`
+            });
+        console.log(response.body)
+        expect(response.status).toBe(401);
+    });
+
+
+    /* describe('Cette fonction n'est utilisé que pour des tests pratiques pas dans l'application', () => {
+     it('should return a status 204 if any user is found', async () => {
           const response = await request(server).get('/auth/users')
               .set({
                   Accept: 'application/json',

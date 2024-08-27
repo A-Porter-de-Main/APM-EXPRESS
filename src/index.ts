@@ -4,18 +4,19 @@ import cors from "cors";
 import authRouter from "./routes/auth.routes";
 import requestRouter from "./routes/request.routes";
 import responseRouter from "./routes/response.routes";
-import { errorHandler } from "../middlewares/errorMiddlewares";
+import {errorHandler} from "../middlewares/errorMiddlewares";
 import skillRouter from "./routes/skill.routes";
 import chatRouter from "./routes/chat.routes";
 import messageRouter from "./routes/message.routes";
-import { pusher } from "../utils/pusher";
+import {pusher} from "../utils/pusher";
 
-import { createServer } from 'http';
-import { Server as SocketIOServer } from 'socket.io';
+import {createServer} from 'http';
+import {Server as SocketIOServer} from 'socket.io';
 
 const app = express()
 const port = process.env.PORT_BACKEND || 80;
 const allowedOrigins = ['http://localhost:3000', 'http://localhost:3001', "https://jordanboutrois.fr"];
+
 
 const options: cors.CorsOptions = {
     origin: allowedOrigins,
@@ -41,6 +42,32 @@ app.use(errorHandler)
 app.get("/", (req, res) => {
     res.send("Bienvenue sur l'api express apm")
 })
+
+// ...app.use statements
+
+// app.post("/pusher/auth", (req, res) => {
+//     const socketId = req.body.socket_id;
+//     const channel = req.body.channel_name;
+//     const username = "admin";
+
+
+//     const authResponse = pusher.authorizeChannel(socketId, channel);
+//     res.json({
+//         ...authResponse,
+//         //   channel_data: JSON.stringify(user),
+//     });
+// });
+
+
+// ...rest of code
+
+
+if (process.env.NODE_ENV !== 'test') {
+    app.listen(port, () => console.log(`Listening on port ${port}`));
+}
+
+module.exports = app;
+
 
 if (process.env.NODE_ENV != "test") {
     app.listen(port, () => {
@@ -78,7 +105,8 @@ io.on('connection', (socket) => {
 
 const socketPort = 84;
 
-
-httpServer.listen(socketPort, () => {
-    console.log(`Server running on http://localhost:${socketPort}`);
-});
+if (process.env.NODE_ENV !== 'test') {
+    httpServer.listen(socketPort, () => {
+        console.log(`Server running on http://localhost:${socketPort}`);
+    });
+}
