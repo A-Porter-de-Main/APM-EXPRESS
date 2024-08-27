@@ -50,6 +50,7 @@ export const PostRequest = async (req: Request, res: Response, next: NextFunctio
 
         return res.status(201).json(requestCreated);
     } catch (e) {
+      console.log(" Erreur controlle request: ", e)
         next(e)
     }
 }
