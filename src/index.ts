@@ -40,7 +40,7 @@ app.use("/message", messageRouter)
 app.use(errorHandler)
 
 app.get("/", (req, res) => {
-    res.send("Bienvenue sur l'api express apm")
+    res.send(`Bienvenue sur l'api express apm sur l'environnement ${process.env.ENV}`)
 })
 
 
