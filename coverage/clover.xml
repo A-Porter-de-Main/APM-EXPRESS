@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1724873962542" clover="3.2.0">
-  <project timestamp="1724873962542" name="All files">
-    <metrics statements="1791" coveredstatements="1597" conditionals="246" coveredconditionals="193" methods="64" coveredmethods="55" elements="2101" coveredelements="1845" complexity="0" loc="1791" ncloc="1791" packages="9" files="32" classes="32"/>
+<coverage generated="1724874115229" clover="3.2.0">
+  <project timestamp="1724874115229" name="All files">
+    <metrics statements="1793" coveredstatements="1599" conditionals="246" coveredconditionals="193" methods="64" coveredmethods="55" elements="2103" coveredelements="1847" complexity="0" loc="1793" ncloc="1793" packages="9" files="32" classes="32"/>
     <package name="config">
       <metrics statements="56" coveredstatements="26" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
       <file name="multer.ts" path="/Users/thibautlecee/CesiProject/APM-EXPRESS/config/multer.ts">
@@ -200,9 +200,9 @@
       </file>
     </package>
     <package name="src">
-      <metrics statements="89" coveredstatements="64" conditionals="2" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <metrics statements="91" coveredstatements="66" conditionals="2" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="index.ts" path="/Users/thibautlecee/CesiProject/APM-EXPRESS/src/index.ts">
-        <metrics statements="89" coveredstatements="64" conditionals="2" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <metrics statements="91" coveredstatements="66" conditionals="2" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
@@ -245,17 +245,17 @@
         <line num="40" count="1" type="stmt"/>
         <line num="41" count="1" type="stmt"/>
         <line num="42" count="1" type="stmt"/>
-        <line num="43" count="0" type="stmt"/>
+        <line num="43" count="1" type="stmt"/>
         <line num="44" count="0" type="stmt"/>
-        <line num="45" count="1" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
         <line num="46" count="1" type="stmt"/>
-        <line num="47" count="1" type="cond" truecount="0" falsecount="1"/>
-        <line num="48" count="0" type="stmt"/>
+        <line num="47" count="1" type="stmt"/>
+        <line num="48" count="1" type="cond" truecount="0" falsecount="1"/>
         <line num="49" count="0" type="stmt"/>
         <line num="50" count="0" type="stmt"/>
         <line num="51" count="0" type="stmt"/>
         <line num="52" count="0" type="stmt"/>
-        <line num="53" count="1" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
         <line num="54" count="1" type="stmt"/>
         <line num="55" count="1" type="stmt"/>
         <line num="56" count="1" type="stmt"/>
@@ -267,8 +267,8 @@
         <line num="62" count="1" type="stmt"/>
         <line num="63" count="1" type="stmt"/>
         <line num="64" count="1" type="stmt"/>
-        <line num="65" count="0" type="stmt"/>
-        <line num="66" count="0" type="stmt"/>
+        <line num="65" count="1" type="stmt"/>
+        <line num="66" count="1" type="stmt"/>
         <line num="67" count="0" type="stmt"/>
         <line num="68" count="0" type="stmt"/>
         <line num="69" count="0" type="stmt"/>
@@ -281,17 +281,19 @@
         <line num="76" count="0" type="stmt"/>
         <line num="77" count="0" type="stmt"/>
         <line num="78" count="0" type="stmt"/>
-        <line num="79" count="1" type="stmt"/>
-        <line num="80" count="1" type="stmt"/>
+        <line num="79" count="0" type="stmt"/>
+        <line num="80" count="0" type="stmt"/>
         <line num="81" count="1" type="stmt"/>
         <line num="82" count="1" type="stmt"/>
-        <line num="83" count="1" type="cond" truecount="0" falsecount="1"/>
-        <line num="84" count="0" type="stmt"/>
-        <line num="85" count="0" type="stmt"/>
+        <line num="83" count="1" type="stmt"/>
+        <line num="84" count="1" type="stmt"/>
+        <line num="85" count="1" type="cond" truecount="0" falsecount="1"/>
         <line num="86" count="0" type="stmt"/>
         <line num="87" count="0" type="stmt"/>
-        <line num="88" count="1" type="stmt"/>
-        <line num="89" count="1" type="stmt"/>
+        <line num="88" count="0" type="stmt"/>
+        <line num="89" count="0" type="stmt"/>
+        <line num="90" count="1" type="stmt"/>
+        <line num="91" count="1" type="stmt"/>
       </file>
     </package>
     <package name="src.controllers">
