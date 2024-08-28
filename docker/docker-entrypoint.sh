@@ -1,17 +1,16 @@
 #!/bin/sh
 echo "Lancement entrypoint"
 
-# if [ $NODE_ENV == "development" ]
-# then
-#     echo "On est en Dev"
-#     npm install
-# fi
+if [ $ENV == "preproduction" ]
+then
+    echo "On est en pré production"
+fi
 
-echo "Installation"
-npm ci
+# echo "Installation"
+# npm ci
 
-echo "Build"
-npm run build
+# echo "Build"
+# npm run build
 
 echo "Prisma generate"
 npx prisma generate

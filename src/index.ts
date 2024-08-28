@@ -44,10 +44,9 @@ app.get("/", (req, res) => {
 })
 
 
-
 if (process.env.NODE_ENV != "test") {
     app.listen(port, () => {
-        console.log(`Server running on http://localhost:${port}`)
+        console.log(`Server running on http://localhost:${port} on ${process.env.ENV} environnement`)
     })
 
 }
