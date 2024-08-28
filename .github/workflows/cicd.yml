@@ -44,8 +44,8 @@ jobs:
             echo "TEST_PASSWORD=${{ secrets.TEST_PASSWORD }}" >> .env
         - run: docker compose up -d --build
         - run: sleep 10 # wait for the database to be ready mariadb
-        - run: docker compose logs node
-        - run: docker compose exec node npm run test
+        # - run: docker compose logs backend
+        - run: docker compose exec backend npm run test
 
 
 
