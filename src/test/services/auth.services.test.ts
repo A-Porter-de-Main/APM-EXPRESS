@@ -8,7 +8,7 @@ import {AuthenticateUser} from "../../services/auth.services";
 require('dotenv').config();
 
 const prisma = new PrismaClient();
-const server = require('../../index');
+import server from '../../index';
 
 
 const validUser = {

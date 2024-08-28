@@ -10,7 +10,7 @@ require('dotenv').config();
 
 const prisma = new PrismaClient();
 
-const server = require('../../index');
+import server from '../../index';
 
 beforeEach(async () => {
     jest.resetModules()
@@ -19,7 +19,7 @@ beforeEach(async () => {
 
 afterEach(async () => {
     await prisma.$disconnect(); // Fermez la connexion Prisma après chaque test
-    if (server && server.close) await server.close();
+
 });
 
 

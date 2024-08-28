@@ -10,7 +10,8 @@ import {GetOneMessageById} from "../../services/message.services";
 dotenv.config();
 
 const prisma = new PrismaClient();
-const server = require('../../index');
+import server from '../../index';
+
 
 beforeEach(async () => {
     jest.resetModules();

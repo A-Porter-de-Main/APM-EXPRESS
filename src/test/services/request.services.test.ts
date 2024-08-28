@@ -10,7 +10,7 @@ import {v4 as uuidv4} from 'uuid';
 
 const prisma = new PrismaClient();
 
-const server = require('../../index');
+import server from '../../index';
 
 beforeEach(async () => {
     jest.resetModules()
