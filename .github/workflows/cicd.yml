@@ -9,7 +9,17 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: a-porter-de-main/apm-express
-  TAG: ${{ github.ref == 'refs/heads/main' && 'latest' || github.ref == 'refs/heads/develop' && 'latest' || 'latest' }}
+  TAG: ${{ github.ref == 'refs/heads/main' && 'latest' || github.ref == 'refs/heads/develop' && 'develop' || 'latest' }}
+  ENV: ${{ github.ref == 'refs/heads/develop' && 'preproduction' || 'production' }}
+  PORT_BACKEND: ${{ secrets.PORT }} # le même en prod et preprod
+  JWT_SECRET: ${{  secrets.JWT_SECRET }}
+  JWT_EXPIRES_IN: ${{ secrets.JWT_EXPIRES_IN }}
+  ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+  ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD}}
+  TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+  TEST_PASSWORD: ${{ secrets.TEST_PASSWORD}}
+  DATABASE_URL: ${{ github.ref == 'refs/heads/develop' && secrets.PREPROD_DATABASE_URL || secrets.DATABASE_URL }}
+
 
 jobs:
   buildDocker:
@@ -25,12 +35,24 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GTHB_TOKEN }}
 
-      - name: Set Docker image tag based on branch
-        id: set-tag
-        run: echo "TAG=$(if [[ ${{ github.ref }} == 'refs/heads/develop' ]]; then echo 'latest'; else echo 'latest'; fi)" >> $GITHUB_ENV
-
       - name: Build Docker image
         run: docker build --tag ghcr.io/${{ env.IMAGE_NAME }}:${{ env.TAG }} --platform linux/amd64 .
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.TAG }} \
+            --build-arg ENV=${{ env.ENV }} \
+            --build-arg PORT_BACKEND=${{ env.PORT_BACKEND }} \
+            --build-arg JWT_SECRET=${{ env.JWT_SECRET }} \
+            --build-arg JWT_EXPIRES_IN=${{ env.JWT_EXPIRES_IN }} \
+            --build-arg ADMIN_EMAIL=${{ env.ADMIN_EMAIL }} \
+            --build-arg ADMIN_PASSWORD=${{ env.ADMIN_PASSWORD }} \
+            --build-arg TEST_EMAIL=${{ env.TEST_EMAIL }} \
+            --build-arg TEST_PASSWORD=${{ env.TEST_PASSWORD }} \
+            --build-arg DATABASE_URL=${{ env.DATABASE_URL }} \
+            --platform linux/amd64 \
+            .
 
       - name: Push Docker image to GHCR
         run: docker push ghcr.io/${{ env.IMAGE_NAME }}:${{ env.TAG }}

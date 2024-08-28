@@ -15,13 +15,14 @@ import {Server as SocketIOServer} from 'socket.io';
 
 const app = express()
 const port = process.env.PORT_BACKEND || 80;
-const allowedOrigins = ['http://localhost:3000', 'http://localhost:3001', "https://jordanboutrois.fr"];
+const allowedOrigins = ['http://localhost:3000', 'http://localhost:3001', "https://jordanboutrois.fr", "https://preprod.jordanboutrois.fr"];
 
 
 const options: cors.CorsOptions = {
     origin: allowedOrigins,
     credentials: true,
 };
+
 
 app.use(cors(options))
 app.use(morgan("dev"));
@@ -40,16 +41,17 @@ app.use("/message", messageRouter)
 app.use(errorHandler)
 
 app.get("/", (req, res) => {
-    res.send("Bienvenue sur l'api express apm")
+    res.send(`Bienvenue sur l'api express apm sur l'environnement ${process.env.ENV}`)
 })
 
 
 if (process.env.NODE_ENV != "test") {
     app.listen(port, () => {
-        console.log(`Server running on http://localhost:${port}`)
+        console.log(`Server running on http://localhost:${port} on ${process.env.ENV} environnement`)
     })
 
 }
+
 
 //Mon serveur socket
 const app2 = express();
