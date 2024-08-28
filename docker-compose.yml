@@ -1,19 +1,31 @@
 version: '3.8'
+
 services:  
   backend:
-      container_name: backend-Express
-      ports: 
-        - '80:80'
-        - '84:84'
-      build:
-        context: ./
-        dockerfile: Dockerfile
-        args:
-          PORT: ${PORT}
-          JWT_SECRET: ${JWT_SECRET}
-          JWT_EXPIRES_IN: ${JWT_EXPIRES_IN}
-          ADMIN_EMAIL: ${ADMIN_EMAIL}
-          ADMIN_PASSWORD: ${ADMIN_PASSWORD}
-          DATABASE_URL: ${DATABASE_URL}
-      env_file:
-        - ./.env
+    depends_on:
+      - db
+    container_name: backend-Express
+    ports: 
+      - '80:80'
+      - '84:84'
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      args:
+        PORT_BACKEND: ${PORT_BACKEND}
+        JWT_SECRET: ${JWT_SECRET}
+        JWT_EXPIRES_IN: ${JWT_EXPIRES_IN}
+        ADMIN_EMAIL: ${ADMIN_EMAIL}
+        ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+        DATABASE_URL: ${DATABASE_URL}
+    env_file:
+      - ./.env
+  
+  db:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}

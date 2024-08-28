@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">82.35% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>56/68</span>
+                <span class='fraction'>68/68</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">76.92% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>10/13</span>
+                <span class='fraction'>13/13</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">82.35% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>56/68</span>
+                <span class='fraction'>68/68</span>
             </div>
         
             
@@ -140,32 +140,32 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -212,27 +212,27 @@ export const createRequestSchema = z.object({
 &nbsp;
     const existingUser = await CheckExistingFieldForZod("id", val, "user")
 &nbsp;
-    if (!existingUser) <span class="branch-0 cbranch-no" title="branch not covered" >{</span>
-<span class="cstat-no" title="statement not covered" >      ctx.addIssue({</span>
-<span class="cstat-no" title="statement not covered" >        code: "custom",</span>
-<span class="cstat-no" title="statement not covered" >        message: "User does not exist",</span>
-<span class="cstat-no" title="statement not covered" >        path: ["userId"]</span>
-<span class="cstat-no" title="statement not covered" >      })</span>
-<span class="cstat-no" title="statement not covered" >    }</span>
+    if (!existingUser) {
+      ctx.addIssue({
+        code: "custom",
+        message: "User does not exist",
+        path: ["userId"]
+      })
+    }
   }),
   skills: z.string().min(1).superRefine(async (val, ctx) =&gt; {
     const undefinedSkillsIdArray: string[] = []
 &nbsp;
     const existingSkills = await CheckExistingFieldForZod("id", val, "skill")
-    if (!existingSkills) <span class="branch-0 cbranch-no" title="branch not covered" >undefinedSkillsIdArray.push(val)</span>
+    if (!existingSkills) undefinedSkillsIdArray.push(val)
 &nbsp;
-    if (undefinedSkillsIdArray.length &gt; 0) <span class="branch-0 cbranch-no" title="branch not covered" >{</span>
-<span class="cstat-no" title="statement not covered" >      ctx.addIssue({</span>
-<span class="cstat-no" title="statement not covered" >        code: "custom",</span>
-<span class="cstat-no" title="statement not covered" >        message: "doesn't exist",</span>
-<span class="cstat-no" title="statement not covered" >        path: ["skill"]</span>
-<span class="cstat-no" title="statement not covered" >      })</span>
-<span class="cstat-no" title="statement not covered" >    }</span>
+    if (undefinedSkillsIdArray.length &gt; 0) {
+      ctx.addIssue({
+        code: "custom",
+        message: "doesn't exist",
+        path: ["skill"]
+      })
+    }
 &nbsp;
   })
 });
@@ -277,7 +277,7 @@ export const patchRequestSchema = z.object({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-28T19:49:19.630Z
+                at 2024-08-28T20:03:48.183Z
             </div>
         <script src="../prettify.js"></script>
         <script>

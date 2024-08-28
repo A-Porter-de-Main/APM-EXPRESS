@@ -5,8 +5,8 @@ import {skills} from "../data/skills"
 import {requestStatus} from "../data/requestStatus"
 import dotenv from 'dotenv';
 import bcrypt from "bcrypt";
-
 dotenv.config();
+
 const prisma = new PrismaClient();
 
 
@@ -40,6 +40,7 @@ const SeedAdmin = async () => {
     console.log("Starting Seed Admin")
 
     const adminEmail = process.env.ADMIN_EMAIL;
+
     if (!adminEmail) {
         throw new Error('ADMIN_EMAIL environment variable is not defined.');
     }
@@ -83,7 +84,7 @@ const SeedTestAccount = async () => {
 
     const testEmail = process.env.TEST_EMAIL;
     if (!testEmail) {
-        throw new Error('ADMIN_EMAIL environment variable is not defined.');
+        throw new Error('TEST_EMAIL environment variable is not defined.');
     }
 
     const findTest = await prisma.user.findUnique({
