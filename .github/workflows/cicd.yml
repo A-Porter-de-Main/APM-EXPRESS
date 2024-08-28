@@ -48,7 +48,7 @@ jobs:
             --build-arg ADMIN_PASSWORD=${{ env.ADMIN_PASSWORD }} \
             --build-arg DATABASE_URL=${{ env.DATABASE_URL }} \
             --platform linux/amd64 \
-            ./apm
+            .
 
       - name: Push Docker image to GHCR
         run: docker push ghcr.io/${{ env.IMAGE_NAME }}:${{ env.TAG }}
