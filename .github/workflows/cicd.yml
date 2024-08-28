@@ -16,6 +16,8 @@ env:
   JWT_EXPIRES_IN: ${{ secrets.JWT_EXPIRES_IN }}
   ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
   ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD}}
+  TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+  TEST_PASSWORD: ${{ secrets.TEST_PASSWORD}}
   DATABASE_URL: ${{ github.ref == 'refs/heads/develop' && secrets.PREPROD_DATABASE_URL || secrets.DATABASE_URL }}
 
 
@@ -46,6 +48,8 @@ jobs:
             --build-arg JWT_EXPIRES_IN=${{ env.JWT_EXPIRES_IN }} \
             --build-arg ADMIN_EMAIL=${{ env.ADMIN_EMAIL }} \
             --build-arg ADMIN_PASSWORD=${{ env.ADMIN_PASSWORD }} \
+            --build-arg TEST_EMAIL=${{ env.TEST_EMAIL }} \
+            --build-arg TEST_PASSWORD=${{ env.TEST_PASSWORD }} \
             --build-arg DATABASE_URL=${{ env.DATABASE_URL }} \
             --platform linux/amd64 \
             .

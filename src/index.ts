@@ -23,6 +23,7 @@ const options: cors.CorsOptions = {
     credentials: true,
 };
 
+
 app.use(cors(options))
 app.use(morgan("dev"));
 app.use(express.json())
@@ -50,6 +51,7 @@ if (process.env.NODE_ENV != "test") {
     })
 
 }
+
 
 //Mon serveur socket
 const app2 = express();
