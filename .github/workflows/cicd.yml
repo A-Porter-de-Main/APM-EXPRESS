@@ -9,7 +9,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: a-porter-de-main/apm-express
-  TAG: ${{ github.ref == 'refs/heads/main' && 'latest' || github.ref == 'refs/heads/develop' && 'latest' || 'latest' }}
+  TAG: ${{ github.ref == 'refs/heads/main' && 'latest' || github.ref == 'refs/heads/develop' && 'develop' || 'latest' }}
 
 jobs:
   buildDocker:
