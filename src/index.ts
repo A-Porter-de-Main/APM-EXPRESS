@@ -43,30 +43,6 @@ app.get("/", (req, res) => {
     res.send("Bienvenue sur l'api express apm")
 })
 
-// ...app.use statements
-
-// app.post("/pusher/auth", (req, res) => {
-//     const socketId = req.body.socket_id;
-//     const channel = req.body.channel_name;
-//     const username = "admin";
-
-
-//     const authResponse = pusher.authorizeChannel(socketId, channel);
-//     res.json({
-//         ...authResponse,
-//         //   channel_data: JSON.stringify(user),
-//     });
-// });
-
-
-// ...rest of code
-
-
-if (process.env.NODE_ENV !== 'test') {
-    app.listen(port, () => console.log(`Listening on port ${port}`));
-}
-
-module.exports = app;
 
 
 if (process.env.NODE_ENV != "test") {

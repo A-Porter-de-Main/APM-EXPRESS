@@ -57,6 +57,8 @@ export const GetOneRequestById = async (requestId: string) => {
 
 export const CreateRequest = async (requestDto: RequestRegistrationDTO) => {
     try {
+        console.log("1")
+
         const {description, deadline, skills, userId, photos} = requestDto;
 
         let picturesData: any = [];
@@ -68,11 +70,12 @@ export const CreateRequest = async (requestDto: RequestRegistrationDTO) => {
         } else if (photos && typeof photos === 'object') {
             picturesData = [{picturePath: photos.path}]
         }
-
+        console.log("2")
 
         //Récupère status open
         const openStatus = await prisma.requestStatus.findUnique({where: {code: "OPN"}})
         if (!openStatus) return badRequestError("Open status don't exist");
+        console.log("3")
 
         return await prisma.request.create({
             data: {
@@ -101,6 +104,7 @@ export const CreateRequest = async (requestDto: RequestRegistrationDTO) => {
             }
         });
     } catch (e) {
+        console.log("Errueur post request: ", e)
         throw e;
     }
 }

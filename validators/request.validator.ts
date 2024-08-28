@@ -6,7 +6,9 @@ export const createRequestSchema = z.object({
   description: z.string().min(1),
   deadline: z.string().min(1),
   userId: z.string().min(1).superRefine(async (val, ctx) => {
+
     const existingUser = await CheckExistingFieldForZod("id", val, "user")
+
     if (!existingUser) {
       ctx.addIssue({
         code: "custom",
@@ -17,7 +19,6 @@ export const createRequestSchema = z.object({
   }),
   skills: z.string().min(1).superRefine(async (val, ctx) => {
     const undefinedSkillsIdArray: string[] = []
-
 
     const existingSkills = await CheckExistingFieldForZod("id", val, "skill")
     if (!existingSkills) undefinedSkillsIdArray.push(val)

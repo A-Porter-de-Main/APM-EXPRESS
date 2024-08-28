@@ -12,7 +12,7 @@ const prisma = new PrismaClient();
  */
 export const CheckExistingFieldForZod = async (field: string, value: string, model: string): Promise<boolean> => {
   try {
-
+    console.log("ooooooh con")
     let existingValue = undefined;
     let options = {
       where: {
