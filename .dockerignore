@@ -2,3 +2,4 @@
 /.idea
 /uploads
 .git
+/coverage/
