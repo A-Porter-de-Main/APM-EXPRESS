@@ -15,7 +15,7 @@ async function main(callback: () => void) {
     await SeedSkills()
     await SeedRequestStatus()
     await SeedAdmin()
-
+    await SeedTestAccount()
     callback();
 }
 
@@ -77,6 +77,47 @@ const SeedAdmin = async () => {
     })
     console.log("Admin Seeding Success")
 
+}
+const SeedTestAccount = async () => {
+    console.log("Starting Seed TestAccount")
+
+    const testEmail = process.env.TEST_EMAIL;
+    if (!testEmail) {
+        throw new Error('ADMIN_EMAIL environment variable is not defined.');
+    }
+
+    const findTest = await prisma.user.findUnique({
+        where: {
+            email: testEmail
+        },
+    })
+
+    if (findTest) return;
+    const getUserRole = await prisma.role.findUnique({where: {name: "user"}})
+    if (!getUserRole) return;
+    const encryptPassword = await bcrypt.hash(process.env.TEST_PASSWORD as string, 10)
+    await prisma.user.create({
+        data: {
+            email: process.env.TEST_EMAIL as string,
+            password: encryptPassword,
+            roleId: getUserRole.id as string,
+            firstName: "test",
+            lastName: "test",
+            addresses: {
+                create: {
+                    latitude: 0,
+                    longitude: 0,
+                    street: "test",
+                    zipCode: "00001",
+                    city: "test",
+                },
+            },
+            phone: "0000000001",
+            picturePath: "uploads/placeholder.jpg",
+
+        }
+    })
+    console.log("TestAccount Seeding Success")
 }
 
 const SeedRequestStatus = async () => {

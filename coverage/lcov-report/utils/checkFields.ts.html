@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">54.83% </span>
+                <span class="strong">65.32% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>68/124</span>
+                <span class='fraction'>81/124</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">54.54% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>6/11</span>
+                <span class='fraction'>10/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">25% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/4</span>
+                <span class='fraction'>2/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">54.83% </span>
+                <span class="strong">65.32% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>68/124</span>
+                <span class='fraction'>81/124</span>
             </div>
         
             
@@ -250,19 +250,19 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -331,7 +331,7 @@ const prisma = new PrismaClient();
  */
 export const CheckExistingFieldForZod = async (field: string, value: string, model: string): Promise&lt;boolean&gt; =&gt; {
   try {
-&nbsp;
+    console.log("ooooooh con")
     let existingValue = undefined;
     let options = {
       where: {
@@ -376,20 +376,20 @@ export const CheckExistingFieldForZod = async (field: string, value: string, mod
  * @param field 
  * @param value 
  */
-export const CheckExistingField = <span class="fstat-no" title="function not covered" >async (field: string, value: string): Promise&lt;void&gt; =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  try {</span>
-<span class="cstat-no" title="statement not covered" >    const existingUser = await prisma.user.findFirst({</span>
-<span class="cstat-no" title="statement not covered" >      where: {</span>
-<span class="cstat-no" title="statement not covered" >        [field]: value</span>
-<span class="cstat-no" title="statement not covered" >      }</span>
-<span class="cstat-no" title="statement not covered" >    });</span>
-<span class="cstat-no" title="statement not covered" >    if (existingUser) {</span>
-<span class="cstat-no" title="statement not covered" >      alreadyTakenError(field);</span>
-<span class="cstat-no" title="statement not covered" >    }</span>
-<span class="cstat-no" title="statement not covered" >  } catch (e) {</span>
-<span class="cstat-no" title="statement not covered" >    throw e;</span>
-<span class="cstat-no" title="statement not covered" >  }</span>
-<span class="cstat-no" title="statement not covered" >}</span>
+export const CheckExistingField = async (field: string, value: string): Promise&lt;void&gt; =&gt; {
+  try {
+    const existingUser = await prisma.user.findFirst({
+      where: {
+        [field]: value
+      }
+    });
+    if (existingUser) {
+      alreadyTakenError(field);
+    }
+  } catch (e) {
+    throw e;
+  }
+}
 &nbsp;
 /**
  * Fonction pour vérifier si un champ existe model User (pour les user id par exemple)
@@ -451,7 +451,7 @@ export const checkExistingFieldRequestOrThrow = <span class="fstat-no" title="fu
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-27T14:14:45.888Z
+                at 2024-08-28T19:39:22.522Z
             </div>
         <script src="../prettify.js"></script>
         <script>
