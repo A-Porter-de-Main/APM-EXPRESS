@@ -10,7 +10,7 @@ const prisma = new PrismaClient();
  */
 export const GetAllRequest = async () => {
     try {
-        const requests = await prisma.request.findMany({include: {responses: {include: {user: true}}} as any});
+        const requests = await prisma.request.findMany({ include: { user: true, responses: { include: { user: true } } } as any });
 
         if (!requests || requests.length === 0) {
             NoContent();
@@ -100,7 +100,7 @@ export const CreateRequest = async (requestDto: RequestRegistrationDTO) => {
             include: {
                 skills: true,
                 pictures: true,
-                responses: true
+                responses: true,
             }
         });
     } catch (e) {
