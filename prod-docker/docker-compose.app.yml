@@ -1,0 +1,49 @@
+services:
+  front:
+    image: ghcr.io/a-porter-de-main/apm-front:develop
+    env_file:
+      - .env
+    networks:
+      - frontend
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "traefik.enable=true"
+      - "traefik.http.routers.front-http.rule=Host(`jordanboutrois.fr`)"
+      - "traefik.http.routers.front-http.entrypoints=web"
+      - "traefik.http.routers.front-http.middlewares=https-redirect"
+      - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.front-https.rule=Host(`preprod.jordanboutrois.fr`)"
+      - "traefik.http.routers.front-https.entrypoints=websecure"
+      - "traefik.http.routers.front-https.tls.certresolver=myresolver"
+    restart: always
+
+  apm-webapi:
+    image: ghcr.io/a-porter-de-main/apm-express:develop
+    networks:
+      - backend
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "traefik.enable=true"
+      - "traefik.http.routers.apm-api.rule=Host(`preprod-api.jordanboutrois.fr`)"
+      - "traefik.http.routers.apm-api.entrypoints=websecure"
+      - "traefik.http.routers.apm-api.tls.certresolver=myresolver"
+      - "traefik.http.routers.apm-api.service=api-service"
+      - "traefik.http.services.api-service.loadbalancer.server.port=80"
+      - "traefik.http.routers.apm-ws.rule=Host(`preprod-ws.jordanboutrois.fr`)"
+      - "traefik.http.routers.apm-ws.entrypoints=websecure"
+      - "traefik.http.routers.apm-ws.service=ws-service"
+      - "traefik.http.routers.apm-ws.tls.certresolver=myresolver"
+      - "traefik.http.services.ws-service.loadbalancer.server.port=84"
+    volumes:
+      - "./uploads:/app/uploads"
+    restart: always
+    env_file:
+      - .env
+
+networks:
+  frontend:
+    external: true
+    name: custom_frontend
+  backend:
+    external: true
+    name: custom_backend
